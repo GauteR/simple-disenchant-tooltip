@@ -44,5 +44,5 @@ eventFrame:SetScript("OnEvent", function(_, event)
     Disenchanter.Options:Initialize()
   end
 
-  Print(Disenchanter:T("CHAT_LOADED"))
+  --Print(Disenchanter:T("CHAT_LOADED"))
 end)
