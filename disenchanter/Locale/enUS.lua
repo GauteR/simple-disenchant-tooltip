@@ -13,7 +13,7 @@ L.CHAT_STATUS_OFF = "Addon is disabled in Config."
 
 L.OPTIONS_VERSION_FMT = "Version %s"
 L.OPTIONS_HELP =
-  "Hover reagents for the primary disenchant source, or gear for the primary expected outcome. Line color: green high chance, yellow medium, gray low."
+  "Hover reagents for the top two disenchant sources, or gear for all expected outcomes. Line color: green high chance, yellow medium, gray low."
 
 L.SOURCE_LINE_FMT = "Disenchant: %s %s, item level %d–%d"
 L.OUTCOME_LINE_FMT = "Disenchant: %s %s"
