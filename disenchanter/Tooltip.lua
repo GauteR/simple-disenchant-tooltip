@@ -122,6 +122,7 @@ function Tooltip:AppendOutcomes(tooltip, itemId)
     return false
   end
 
+  local r, g, b = Materials:ChanceColor(outcome.chance)
   tooltip:AddLine(" ")
   for i = 1, #outcomes do
     local outcome = outcomes[i]
