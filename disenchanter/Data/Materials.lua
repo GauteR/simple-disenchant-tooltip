@@ -147,61 +147,83 @@ function Materials:ChanceColor(chance)
   return 0.55, 0.55, 0.55
 end
 
--- Collapse sources into one primary farm line (highest chance quality+type, merged ilvl).
-function Materials:GetPrimarySource(itemId)
+-- Merge source bands by quality+type, then return top N by chance (default 2).
+function Materials:GetTopSources(itemId, limit)
+  limit = limit or 2
   local entry = self:GetEntry(itemId)
   if not entry or not entry.sources or #entry.sources == 0 then
     return nil
   end
 
-  local bestChance = -1
-  local bestQuality, bestType
+  local groups = {}
+  local order = {}
   for i = 1, #entry.sources do
     local s = entry.sources[i]
-    if s.chance > bestChance then
-      bestChance = s.chance
-      bestQuality = s.quality
-      bestType = s.itemType
+    local key = s.quality .. "\0" .. s.itemType
+    local g = groups[key]
+    if not g then
+      g = {
+        quality = s.quality,
+        itemType = s.itemType,
+        minLevel = s.minLevel,
+        maxLevel = s.maxLevel,
+        chance = s.chance,
+      }
+      groups[key] = g
+      order[#order + 1] = key
+    else
+      if s.minLevel < g.minLevel then
+        g.minLevel = s.minLevel
+      end
+      if s.maxLevel > g.maxLevel then
+        g.maxLevel = s.maxLevel
+      end
+      if s.chance > g.chance then
+        g.chance = s.chance
+      end
     end
   end
 
-  local minLevel, maxLevel, chance = nil, nil, bestChance
-  for i = 1, #entry.sources do
-    local s = entry.sources[i]
-    if s.quality == bestQuality and s.itemType == bestType then
-      if not minLevel or s.minLevel < minLevel then
-        minLevel = s.minLevel
-      end
-      if not maxLevel or s.maxLevel > maxLevel then
-        maxLevel = s.maxLevel
-      end
-      if s.chance > chance then
-        chance = s.chance
-      end
-    end
+  local list = {}
+  for i = 1, #order do
+    list[#list + 1] = groups[order[i]]
   end
+  table.sort(list, function(a, b)
+    if a.chance ~= b.chance then
+      return a.chance > b.chance
+    end
+    if a.minLevel ~= b.minLevel then
+      return a.minLevel < b.minLevel
+    end
+    return tostring(a.itemType) < tostring(b.itemType)
+  end)
 
-  return {
-    quality = bestQuality,
-    itemType = bestType,
-    minLevel = minLevel,
-    maxLevel = maxLevel,
-    chance = chance,
-  }
+  local top = {}
+  for i = 1, math.min(limit, #list) do
+    top[i] = list[i]
+  end
+  if #top == 0 then
+    return nil
+  end
+  return top
 end
 
--- Highest-chance outcome only (primary DE result).
-function Materials:GetPrimaryOutcome(outcomes)
+-- Outcomes sorted by chance descending (all expected results for gear).
+function Materials:SortOutcomesByChance(outcomes)
   if not outcomes or #outcomes == 0 then
     return nil
   end
-  local best = outcomes[1]
-  for i = 2, #outcomes do
-    if outcomes[i].chance > best.chance then
-      best = outcomes[i]
-    end
+  local sorted = {}
+  for i = 1, #outcomes do
+    sorted[i] = outcomes[i]
   end
-  return best
+  table.sort(sorted, function(a, b)
+    if a.chance ~= b.chance then
+      return a.chance > b.chance
+    end
+    return (a.id or 0) < (b.id or 0)
+  end)
+  return sorted
 end
 
 Materials.BY_ID = BY_ID

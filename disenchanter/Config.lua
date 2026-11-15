@@ -4,9 +4,9 @@ Disenchanter = Disenchanter or {}
 Disenchanter.Config = {
   -- Set to false to disable slash command, Options actions, and tooltip lines.
   ENABLED = true,
-  -- Material hover: show primary DE source (one line, chance-colored).
+  -- Material hover: top two DE sources (chance-colored).
   MATERIAL_SOURCES = true,
-  -- Gear hover: show primary expected DE outcome (one line, chance-colored).
+  -- Gear hover: all expected DE outcomes (chance-colored).
   ITEM_OUTCOMES = true,
   -- Tooltip line colors by drop chance: green / yellow / gray.
   CHANCE_GREEN = 75,
