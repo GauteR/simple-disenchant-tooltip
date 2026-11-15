@@ -13,16 +13,16 @@ L.CHAT_STATUS_OFF = "Addon is disabled in Config."
 
 L.OPTIONS_VERSION_FMT = "Version %s"
 L.OPTIONS_HELP =
-  "Hover reagents for the primary disenchant source, or gear for the primary expected outcome. Line color: green high chance, yellow medium, gray low."
+  "Hover reagents for the top two disenchant sources, or gear for all expected outcomes. Line color: green high chance, yellow medium, gray low."
 
-L.SOURCE_LINE_FMT = "Disenchant: %s %s, item level %d–%d"
-L.OUTCOME_LINE_FMT = "Disenchant: %s %s"
+L.SOURCE_LINE_FMT = "%s %s, item level %d–%d"
+L.OUTCOME_LINE_FMT = "%s %s"
 L.QUALITY_UNCOMMON = "Uncommon"
 L.QUALITY_RARE = "Rare"
 L.QUALITY_EPIC = "Epic"
 L.TYPE_ARMOR = "Armor"
-L.TYPE_WEAPON = "Weapon/Shield/OH"
-L.TYPE_ANY = "Armor or Weapon"
+L.TYPE_WEAPON = "Weapons"
+L.TYPE_ANY = "Armor or Weapons"
 
 -- Resolve a locale key; optional format args.
 function Disenchanter:T(key, ...)

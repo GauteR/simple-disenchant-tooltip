@@ -90,15 +90,18 @@ function Tooltip:AppendSources(tooltip, itemId)
   if not Materials then
     return false
   end
-  -- One primary farm line (merged ilvl); color by chance tier.
-  local source = Materials:GetPrimarySource(itemId)
-  if not source then
+  -- Top two farm lines (highest + second); color by chance tier.
+  local sources = Materials:GetTopSources(itemId, 2)
+  if not sources then
     return false
   end
 
-  local r, g, b = Materials:ChanceColor(source.chance)
   tooltip:AddLine(" ")
-  tooltip:AddLine(FormatSourceLine(source), r, g, b)
+  for i = 1, #sources do
+    local source = sources[i]
+    local r, g, b = Materials:ChanceColor(source.chance)
+    tooltip:AddLine(FormatSourceLine(source), r, g, b)
+  end
   return true
 end
 
@@ -114,15 +117,18 @@ function Tooltip:AppendOutcomes(tooltip, itemId)
   if not Materials then
     return false
   end
-  local outcomes = Materials:GetOutcomesForItem(itemId)
-  local outcome = Materials:GetPrimaryOutcome(outcomes)
-  if not outcome then
+  local outcomes = Materials:SortOutcomesByChance(Materials:GetOutcomesForItem(itemId))
+  if not outcomes then
     return false
   end
 
   local r, g, b = Materials:ChanceColor(outcome.chance)
   tooltip:AddLine(" ")
-  tooltip:AddLine(FormatOutcomeLine(outcome), r, g, b)
+  for i = 1, #outcomes do
+    local outcome = outcomes[i]
+    local r, g, b = Materials:ChanceColor(outcome.chance)
+    tooltip:AddLine(FormatOutcomeLine(outcome), r, g, b)
+  end
   return true
 end
 
@@ -133,7 +139,7 @@ function Tooltip:AppendForItem(tooltip, itemId)
   if not itemId then
     return
   end
-  -- Materials show farm source; gear shows expected primary DE result.
+  -- Materials: top two sources; gear: all expected DE results.
   if not self:AppendSources(tooltip, itemId) then
     self:AppendOutcomes(tooltip, itemId)
   end
