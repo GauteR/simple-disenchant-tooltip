@@ -13,12 +13,10 @@ L.CHAT_STATUS_OFF = "Addon is disabled in Config."
 
 L.OPTIONS_VERSION_FMT = "Version %s"
 L.OPTIONS_HELP =
-  "Hover enchanting reagents to see which items disenchant into them (with drop chances). Hover gear to see expected disenchant outcomes (with percentages)."
+  "Hover reagents for the primary disenchant source, or gear for the primary expected outcome. Line color: green high chance, yellow medium, gray low."
 
-L.TOOLTIP_HEADER_SOURCES = "Disenchant sources:"
-L.TOOLTIP_HEADER_OUTCOMES = "Disenchant (expected):"
-L.SOURCE_LINE_FMT = "• %s %s, item level %d–%d — %d%%"
-L.OUTCOME_LINE_FMT = "• %s %s — %d%%"
+L.SOURCE_LINE_FMT = "Disenchant: %s %s, item level %d–%d"
+L.OUTCOME_LINE_FMT = "Disenchant: %s %s"
 L.QUALITY_UNCOMMON = "Uncommon"
 L.QUALITY_RARE = "Rare"
 L.QUALITY_EPIC = "Epic"

@@ -4,9 +4,6 @@ Disenchanter.Tooltip = Disenchanter.Tooltip or {}
 
 local Tooltip = Disenchanter.Tooltip
 
-local HEADER_COLOR = { r = 0.2, g = 0.8, b = 1.0 }
-local LINE_COLOR = { r = 0.85, g = 0.85, b = 0.85 }
-
 -- Classic / comparison tooltips beyond GameTooltip + ItemRef.
 local CLASSIC_TOOLTIP_NAMES = {
   "GameTooltip",
@@ -54,8 +51,7 @@ local function FormatSourceLine(source)
     QualityLabel(source.quality),
     TypeLabel(source.itemType),
     source.minLevel,
-    source.maxLevel,
-    source.chance
+    source.maxLevel
   )
 end
 
@@ -64,8 +60,7 @@ local function FormatOutcomeLine(outcome)
   return Disenchanter:T(
     "OUTCOME_LINE_FMT",
     name,
-    QtyText(outcome.min, outcome.max),
-    outcome.chance
+    QtyText(outcome.min, outcome.max)
   )
 end
 
@@ -95,16 +90,15 @@ function Tooltip:AppendSources(tooltip, itemId)
   if not Materials then
     return false
   end
-  local entry = Materials:GetEntry(itemId)
-  if not entry or not entry.sources then
+  -- One primary farm line (merged ilvl); color by chance tier.
+  local source = Materials:GetPrimarySource(itemId)
+  if not source then
     return false
   end
 
+  local r, g, b = Materials:ChanceColor(source.chance)
   tooltip:AddLine(" ")
-  tooltip:AddLine(Disenchanter:T("TOOLTIP_HEADER_SOURCES"), HEADER_COLOR.r, HEADER_COLOR.g, HEADER_COLOR.b)
-  for i = 1, #entry.sources do
-    tooltip:AddLine(FormatSourceLine(entry.sources[i]), LINE_COLOR.r, LINE_COLOR.g, LINE_COLOR.b)
-  end
+  tooltip:AddLine(FormatSourceLine(source), r, g, b)
   return true
 end
 
@@ -121,15 +115,14 @@ function Tooltip:AppendOutcomes(tooltip, itemId)
     return false
   end
   local outcomes = Materials:GetOutcomesForItem(itemId)
-  if not outcomes or #outcomes == 0 then
+  local outcome = Materials:GetPrimaryOutcome(outcomes)
+  if not outcome then
     return false
   end
 
+  local r, g, b = Materials:ChanceColor(outcome.chance)
   tooltip:AddLine(" ")
-  tooltip:AddLine(Disenchanter:T("TOOLTIP_HEADER_OUTCOMES"), HEADER_COLOR.r, HEADER_COLOR.g, HEADER_COLOR.b)
-  for i = 1, #outcomes do
-    tooltip:AddLine(FormatOutcomeLine(outcomes[i]), LINE_COLOR.r, LINE_COLOR.g, LINE_COLOR.b)
-  end
+  tooltip:AddLine(FormatOutcomeLine(outcome), r, g, b)
   return true
 end
 
@@ -140,7 +133,7 @@ function Tooltip:AppendForItem(tooltip, itemId)
   if not itemId then
     return
   end
-  -- Materials show farm sources; gear shows expected DE results.
+  -- Materials show farm source; gear shows expected primary DE result.
   if not self:AppendSources(tooltip, itemId) then
     self:AppendOutcomes(tooltip, itemId)
   end
