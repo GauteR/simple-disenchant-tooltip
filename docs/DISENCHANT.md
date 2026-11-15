@@ -22,3 +22,11 @@ Addonen viser **hvilke items** (quality, type, item level) som disenchanter til 
 - [Legacy of Warcraft — Classic disenchanting table](https://legacyofwarcraft.com/db/classic/professions/disenchanting.html)
 
 Forever kan avvike; merk avvik i `MEMORIES.md` etter in-game sjekk.
+
+## Lokal publish
+
+```bash
+./scripts/publish-local.sh
+```
+
+PowerShell-speil: `scripts/publish-local.ps1`. Begge skal finnes i alle Forever-addons (Git Bash er primær).
