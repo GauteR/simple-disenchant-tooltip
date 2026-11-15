@@ -13,11 +13,12 @@ L.CHAT_STATUS_OFF = "Addon is disabled in Config."
 
 L.OPTIONS_VERSION_FMT = "Version %s"
 L.OPTIONS_HELP =
-  "Hover an enchanting reagent (dust, essence, shard, or crystal) to see which item levels, qualities, and types disenchant into it."
+  "Hover enchanting reagents to see which items disenchant into them (with drop chances). Hover gear to see expected disenchant outcomes (with percentages)."
 
-L.TOOLTIP_HEADER = "Disenchant sources:"
-L.SOURCE_LINE_FMT = "• %s %s, item level %d–%d"
-L.SOURCE_SECONDARY_SUFFIX = " (lower chance)"
+L.TOOLTIP_HEADER_SOURCES = "Disenchant sources:"
+L.TOOLTIP_HEADER_OUTCOMES = "Disenchant (expected):"
+L.SOURCE_LINE_FMT = "• %s %s, item level %d–%d — %d%%"
+L.OUTCOME_LINE_FMT = "• %s %s — %d%%"
 L.QUALITY_UNCOMMON = "Uncommon"
 L.QUALITY_RARE = "Rare"
 L.QUALITY_EPIC = "Epic"

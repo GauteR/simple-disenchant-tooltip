@@ -1,6 +1,6 @@
 ## Interface: 16001
 ## Title: Disenchanter
-## Notes: Shows Vanilla Classic disenchant sources when you hover enchanting materials.
+## Notes: Shows Vanilla Classic disenchant sources and expected outcomes on item tooltips.
 ## Author: Neema
 ## Version: @project-version@
 ## DefaultState: enabled
@@ -8,6 +8,7 @@
 
 Config.lua
 Locale/enUS.lua
+Data/Tables.lua
 Data/Materials.lua
 Core.lua
 Tooltip.lua
