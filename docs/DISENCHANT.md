@@ -1,9 +1,11 @@
 # Disenchanter — datakilde
 
-Addonen viser disenchant-info i tooltips:
+Addonen viser **én** disenchant-linje i tooltips:
 
-1. **Materiale** — hvilke items (quality, type, item level) som DE til reagenset, med **drop-%**
-2. **Utstyr** — antatt DE-utfall for itemet, med **%-sannsynlighet** og antall
+1. **Materiale** — primær farm-kilde (quality, type, sammenslått item level)
+2. **Utstyr** — primært forventet DE-utfall (materiale + antall)
+
+Linjefarge etter drop-sjanse: **grønn** ≥ `CHANCE_GREEN` (75), **gul** ≥ `CHANCE_YELLOW` (35), ellers **grå**. Ingen %-tall i teksten.
 
 ## Scope
 
@@ -13,8 +15,8 @@ Addonen viser disenchant-info i tooltips:
 
 ## Oppførsel
 
-- Material-hover: `Config.MATERIAL_SOURCES`
-- Gear-hover: `Config.ITEM_OUTCOMES` (krever `GetItemInfo` / `C_Item.GetItemInfo` for quality, ilvl, type)
+- Material-hover: `Config.MATERIAL_SOURCES` (én sammenslått primærkilde)
+- Gear-hover: `Config.ITEM_OUTCOMES` (én primær outcome; krever `GetItemInfo` / `C_Item.GetItemInfo`)
 - Master-flag: `Config.ENABLED`
 - Shield / off-hand telles som **WEAPON** i DE-tabellene (essence-primær)
 - Tooltip-hook: `TooltipDataProcessor` når tilgjengelig; ellers `OnTooltipSetItem` på GameTooltip, ItemRefTooltip, ShoppingTooltip1/2, EmbeddedItemTooltip
