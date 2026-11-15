@@ -1,0 +1,35 @@
+-- English (enUS) UI strings.
+Disenchanter = Disenchanter or {}
+local L = {}
+Disenchanter.L = L
+
+L.ADDON_NAME = "Disenchanter"
+L.CHAT_PREFIX = "|cff33ff99Disenchanter|r: "
+
+L.CHAT_DISABLED = "Addon is disabled."
+L.CHAT_LOADED = "Loaded. Hover enchanting materials for disenchant sources. /disenchanter for status."
+L.CHAT_STATUS_ON = "Tooltips enabled (Vanilla Classic tables)."
+L.CHAT_STATUS_OFF = "Addon is disabled in Config."
+
+L.OPTIONS_VERSION_FMT = "Version %s"
+L.OPTIONS_HELP =
+  "Hover an enchanting reagent (dust, essence, shard, or crystal) to see which item levels, qualities, and types disenchant into it. Data follows Vanilla Classic (1.12) tables."
+
+L.TOOLTIP_HEADER = "Disenchant sources (Vanilla):"
+L.SOURCE_LINE_FMT = "• %s %s, item level %d–%d"
+L.SOURCE_SECONDARY_SUFFIX = " (lower chance)"
+L.QUALITY_UNCOMMON = "Uncommon"
+L.QUALITY_RARE = "Rare"
+L.QUALITY_EPIC = "Epic"
+L.TYPE_ARMOR = "Armor"
+L.TYPE_WEAPON = "Weapon/Shield/OH"
+L.TYPE_ANY = "Armor or Weapon"
+
+-- Resolve a locale key; optional format args.
+function Disenchanter:T(key, ...)
+  local text = (self.L and self.L[key]) or key
+  if select("#", ...) > 0 then
+    return string.format(text, ...)
+  end
+  return text
+end

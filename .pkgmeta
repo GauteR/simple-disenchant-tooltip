@@ -1,0 +1,18 @@
+# Repo root is the VCS checkout; addon files live under disenchanter/.
+package-as: disenchanter
+
+move-folders:
+  disenchanter/disenchanter: disenchanter
+
+ignore:
+  - docs
+  - tests
+  - reports
+  - scripts
+  - README.md
+  - .luarc.json
+  - .github
+  - CHANGELOG.md
+  - MEMORIES.md
+
+enable-nolib-creation: no
