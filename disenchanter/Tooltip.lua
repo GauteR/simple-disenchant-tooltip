@@ -1,12 +1,17 @@
--- Append Vanilla Classic disenchant source lines to item tooltips.
+-- Append disenchant source / outcome lines to item tooltips.
 Disenchanter = Disenchanter or {}
 Disenchanter.Tooltip = Disenchanter.Tooltip or {}
 
 local Tooltip = Disenchanter.Tooltip
 
-local HEADER_COLOR = { r = 0.2, g = 0.8, b = 1.0 }
-local LINE_COLOR = { r = 0.85, g = 0.85, b = 0.85 }
-local SECONDARY_COLOR = { r = 0.65, g = 0.65, b = 0.65 }
+-- Classic / comparison tooltips beyond GameTooltip + ItemRef.
+local CLASSIC_TOOLTIP_NAMES = {
+  "GameTooltip",
+  "ItemRefTooltip",
+  "ShoppingTooltip1",
+  "ShoppingTooltip2",
+  "EmbeddedItemTooltip",
+}
 
 local function QualityLabel(quality)
   if quality == "UNCOMMON" then
@@ -30,18 +35,33 @@ local function TypeLabel(itemType)
   return itemType
 end
 
+local function QtyText(minQty, maxQty)
+  if not minQty then
+    return ""
+  end
+  if not maxQty or maxQty == minQty then
+    return tostring(minQty)
+  end
+  return string.format("%d–%d", minQty, maxQty)
+end
+
 local function FormatSourceLine(source)
-  local line = Disenchanter:T(
+  return Disenchanter:T(
     "SOURCE_LINE_FMT",
     QualityLabel(source.quality),
     TypeLabel(source.itemType),
     source.minLevel,
     source.maxLevel
   )
-  if source.secondary then
-    line = line .. Disenchanter:T("SOURCE_SECONDARY_SUFFIX")
-  end
-  return line
+end
+
+local function FormatOutcomeLine(outcome)
+  local name = Disenchanter.Materials:GetMaterialName(outcome.id) or ("#" .. tostring(outcome.id))
+  return Disenchanter:T(
+    "OUTCOME_LINE_FMT",
+    name,
+    QtyText(outcome.min, outcome.max)
+  )
 end
 
 -- Resolve item id from a tooltip frame (Retail-style data or classic GetItem).
@@ -60,33 +80,69 @@ end
 
 function Tooltip:AppendSources(tooltip, itemId)
   if not tooltip or not tooltip.AddLine then
-    return
+    return false
   end
-  if not Disenchanter:IsEnabled() then
-    return
+  local Config = Disenchanter.Config
+  if not Config or Config.MATERIAL_SOURCES ~= true then
+    return false
   end
   local Materials = Disenchanter.Materials
   if not Materials then
-    return
+    return false
   end
-  local entry = Materials:GetEntry(itemId)
-  if not entry or not entry.sources then
-    return
+  -- One primary farm line (merged ilvl); color by chance tier.
+  local source = Materials:GetPrimarySource(itemId)
+  if not source then
+    return false
   end
 
+  local r, g, b = Materials:ChanceColor(source.chance)
   tooltip:AddLine(" ")
-  tooltip:AddLine(Disenchanter:T("TOOLTIP_HEADER"), HEADER_COLOR.r, HEADER_COLOR.g, HEADER_COLOR.b)
-  for i = 1, #entry.sources do
-    local source = entry.sources[i]
-    local color = source.secondary and SECONDARY_COLOR or LINE_COLOR
-    tooltip:AddLine(FormatSourceLine(source), color.r, color.g, color.b)
+  tooltip:AddLine(FormatSourceLine(source), r, g, b)
+  return true
+end
+
+function Tooltip:AppendOutcomes(tooltip, itemId)
+  if not tooltip or not tooltip.AddLine then
+    return false
+  end
+  local Config = Disenchanter.Config
+  if not Config or Config.ITEM_OUTCOMES ~= true then
+    return false
+  end
+  local Materials = Disenchanter.Materials
+  if not Materials then
+    return false
+  end
+  local outcomes = Materials:GetOutcomesForItem(itemId)
+  local outcome = Materials:GetPrimaryOutcome(outcomes)
+  if not outcome then
+    return false
+  end
+
+  local r, g, b = Materials:ChanceColor(outcome.chance)
+  tooltip:AddLine(" ")
+  tooltip:AddLine(FormatOutcomeLine(outcome), r, g, b)
+  return true
+end
+
+function Tooltip:AppendForItem(tooltip, itemId)
+  if not Disenchanter:IsEnabled() then
+    return
+  end
+  if not itemId then
+    return
+  end
+  -- Materials show farm source; gear shows expected primary DE result.
+  if not self:AppendSources(tooltip, itemId) then
+    self:AppendOutcomes(tooltip, itemId)
   end
 end
 
 local function OnItemTooltip(tooltip, data)
   local itemId = ResolveItemId(tooltip, data)
   if itemId then
-    Tooltip:AppendSources(tooltip, itemId)
+    Tooltip:AppendForItem(tooltip, itemId)
   end
 end
 
@@ -110,15 +166,16 @@ function Tooltip:Initialize()
     return
   end
 
-  -- Forever may expose Retail tooltip processors; fall back to classic hooks.
+  -- Prefer TooltipDataProcessor (covers GameTooltip, ItemRef, shopping, etc.).
+  -- Fall back to classic OnTooltipSetItem on all known item tooltip frames.
   if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum and Enum.TooltipDataType and Enum.TooltipDataType.Item then
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, OnItemTooltip)
   else
-    if GameTooltip then
-      HookClassicTooltip(GameTooltip)
-    end
-    if ItemRefTooltip then
-      HookClassicTooltip(ItemRefTooltip)
+    for i = 1, #CLASSIC_TOOLTIP_NAMES do
+      local frame = _G[CLASSIC_TOOLTIP_NAMES[i]]
+      if frame then
+        HookClassicTooltip(frame)
+      end
     end
   end
 
