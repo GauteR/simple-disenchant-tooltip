@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime": {
+    "version": "Lua 5.1",
+    "builtin": {
+      "basic": "default",
+      "bit": "default",
+      "bit32": "default",
+      "coroutine": "default",
+      "debug": "default",
+      "io": "default",
+      "math": "default",
+      "os": "default",
+      "package": "default",
+      "string": "default",
+      "table": "default",
+      "utf8": "default"
+    }
+  },
+  "diagnostics": {
+    "globals": [
+      "Disenchanter",
+      "DEFAULT_CHAT_FRAME",
+      "CreateFrame",
+      "SlashCmdList",
+      "SLASH_DISENCHANTER1",
+      "GameTooltip",
+      "ItemRefTooltip",
+      "TooltipDataProcessor",
+      "Enum",
+      "GameFontHighlight",
+      "GameFontNormalLarge",
+      "Settings",
+      "C_AddOns",
+      "GetAddOnMetadata"
+    ]
+  },
+  "workspace": {
+    "checkThirdParty": false
+  }
+}

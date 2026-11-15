@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: Disenchanter
+## Notes: Shows Vanilla Classic disenchant sources when you hover enchanting materials.
+## Author: Neema
+## Version: @project-version@
+## DefaultState: enabled
+## IconTexture: Interface\Icons\INV_Enchant_DustStrange
+
+Config.lua
+Locale/enUS.lua
+Data/Materials.lua
+Core.lua
+Tooltip.lua
+UI/Options.lua
