@@ -76,9 +76,9 @@ assert_eq(Materials:ClassifyItemType("Armor", "INVTYPE_SHIELD"), "WEAPON", "shie
 assert_eq(Tables:GetMaterialName(16204), "Illusion Dust", "material name")
 
 local line = Disenchanter:T("SOURCE_LINE_FMT", "Uncommon", "Armor", 5, 25)
-assert_eq(line, "Disenchant: Uncommon Armor, item level 5–25", "SOURCE_LINE_FMT")
+assert_eq(line, "Uncommon Armor, item level 5–25", "SOURCE_LINE_FMT")
 local outLine = Disenchanter:T("OUTCOME_LINE_FMT", "Strange Dust", "2–3")
-assert_eq(outLine, "Disenchant: Strange Dust 2–3", "OUTCOME_LINE_FMT")
+assert_eq(outLine, "Strange Dust 2–3", "OUTCOME_LINE_FMT")
 
 local count = 0
 for _ in pairs(Materials.BY_ID) do
