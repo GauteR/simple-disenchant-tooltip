@@ -1,178 +1,40 @@
--- Vanilla Classic (1.12) disenchant sources keyed by enchanting material item ID.
--- Primary rows are the main farm targets; secondary rows are alternate drops.
+-- Material reverse lookup and item classification helpers.
 Disenchanter = Disenchanter or {}
 Disenchanter.Materials = Disenchanter.Materials or {}
 
 local Materials = Disenchanter.Materials
 
--- quality: UNCOMMON | RARE | EPIC
--- itemType: ARMOR | WEAPON | ANY
--- secondary: true = lower drop chance / side product
-local BY_ID = {
-  -- Dusts (primarily uncommon armor)
-  [10940] = { -- Strange Dust
-    sources = {
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 5, maxLevel = 25 },
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 5, maxLevel = 25, secondary = true },
-    },
-  },
-  [11083] = { -- Soul Dust
-    sources = {
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 26, maxLevel = 35 },
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 26, maxLevel = 35, secondary = true },
-    },
-  },
-  [11137] = { -- Vision Dust
-    sources = {
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 36, maxLevel = 45 },
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 36, maxLevel = 45, secondary = true },
-    },
-  },
-  [11176] = { -- Dream Dust
-    sources = {
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 46, maxLevel = 55 },
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 46, maxLevel = 55, secondary = true },
-    },
-  },
-  [16204] = { -- Illusion Dust
-    sources = {
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 56, maxLevel = 65 },
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 56, maxLevel = 65, secondary = true },
-    },
-  },
+-- Built from Tables.FORWARD (percentages per band).
+local BY_ID = Disenchanter.Tables:BuildMaterialSources()
 
-  -- Essences (primarily uncommon weapons / shields / off-hands)
-  [10938] = { -- Lesser Magic Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 5, maxLevel = 15 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 5, maxLevel = 15, secondary = true },
-    },
-  },
-  [10939] = { -- Greater Magic Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 16, maxLevel = 20 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 16, maxLevel = 20, secondary = true },
-    },
-  },
-  [10998] = { -- Lesser Astral Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 21, maxLevel = 25 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 21, maxLevel = 25, secondary = true },
-    },
-  },
-  [11082] = { -- Greater Astral Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 26, maxLevel = 30 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 26, maxLevel = 30, secondary = true },
-    },
-  },
-  [11134] = { -- Lesser Mystic Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 31, maxLevel = 35 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 31, maxLevel = 35, secondary = true },
-    },
-  },
-  [11135] = { -- Greater Mystic Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 36, maxLevel = 40 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 36, maxLevel = 40, secondary = true },
-    },
-  },
-  [11174] = { -- Lesser Nether Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 41, maxLevel = 45 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 41, maxLevel = 45, secondary = true },
-    },
-  },
-  [11175] = { -- Greater Nether Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 46, maxLevel = 50 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 46, maxLevel = 50, secondary = true },
-    },
-  },
-  [16202] = { -- Lesser Eternal Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 51, maxLevel = 55 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 51, maxLevel = 55, secondary = true },
-    },
-  },
-  [16203] = { -- Greater Eternal Essence
-    sources = {
-      { quality = "UNCOMMON", itemType = "WEAPON", minLevel = 56, maxLevel = 65 },
-      { quality = "UNCOMMON", itemType = "ARMOR", minLevel = 56, maxLevel = 65, secondary = true },
-    },
-  },
-
-  -- Shards (guaranteed from rares; also uncommon side drops in overlapping ranges)
-  [10978] = { -- Small Glimmering Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 16, maxLevel = 25 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 16, maxLevel = 25, secondary = true },
-    },
-  },
-  [11084] = { -- Large Glimmering Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 26, maxLevel = 30 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 26, maxLevel = 30, secondary = true },
-    },
-  },
-  [11138] = { -- Small Glowing Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 31, maxLevel = 35 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 31, maxLevel = 35, secondary = true },
-    },
-  },
-  [11139] = { -- Large Glowing Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 36, maxLevel = 40 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 36, maxLevel = 40, secondary = true },
-    },
-  },
-  [11177] = { -- Small Radiant Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 41, maxLevel = 45 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 41, maxLevel = 45, secondary = true },
-    },
-  },
-  [11178] = { -- Large Radiant Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 46, maxLevel = 50 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 46, maxLevel = 50, secondary = true },
-    },
-  },
-  [14343] = { -- Small Brilliant Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 51, maxLevel = 55 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 51, maxLevel = 55, secondary = true },
-    },
-  },
-  [14344] = { -- Large Brilliant Shard
-    sources = {
-      { quality = "RARE", itemType = "ANY", minLevel = 56, maxLevel = 65 },
-      { quality = "UNCOMMON", itemType = "ANY", minLevel = 56, maxLevel = 65, secondary = true },
-    },
-  },
-
-  -- Crystals
-  [20725] = { -- Nexus Crystal
-    sources = {
-      { quality = "EPIC", itemType = "ANY", minLevel = 51, maxLevel = 60 },
-    },
-  },
+-- Equip locations treated as weapons for Classic DE (essence-primary).
+local WEAPON_EQUIP = {
+  INVTYPE_WEAPON = true,
+  INVTYPE_WEAPONMAINHAND = true,
+  INVTYPE_WEAPONOFFHAND = true,
+  INVTYPE_2HWEAPON = true,
+  INVTYPE_RANGED = true,
+  INVTYPE_RANGEDRIGHT = true,
+  INVTYPE_THROWN = true,
+  INVTYPE_SHIELD = true,
+  INVTYPE_HOLDABLE = true,
 }
 
 function Materials:GetEntry(itemId)
   if type(itemId) ~= "number" then
     return nil
   end
-  return BY_ID[itemId]
+  local sources = BY_ID[itemId]
+  if not sources then
+    return nil
+  end
+  return { sources = sources }
 end
 
 function Materials:IsTracked(itemId)
   return self:GetEntry(itemId) ~= nil
 end
 
--- Parse numeric item id from an item link or "item:12345:..." string.
 function Materials:ParseItemId(link)
   if type(link) ~= "string" then
     return nil
@@ -184,5 +46,89 @@ function Materials:ParseItemId(link)
   return tonumber(id)
 end
 
--- Expose table for pure Lua tests.
+function Materials:GetMaterialName(itemId)
+  local Tables = Disenchanter.Tables
+  if Tables and Tables.GetMaterialName then
+    return Tables:GetMaterialName(itemId)
+  end
+  return nil
+end
+
+-- Map API quality number (2/3/4) or Enum to internal quality key.
+function Materials:QualityKey(quality)
+  if quality == 2 or quality == "UNCOMMON" then
+    return "UNCOMMON"
+  elseif quality == 3 or quality == "RARE" then
+    return "RARE"
+  elseif quality == 4 or quality == "EPIC" then
+    return "EPIC"
+  end
+  return nil
+end
+
+-- Classify as ARMOR or WEAPON for DE tables (shields/OH count as WEAPON).
+function Materials:ClassifyItemType(className, equipLoc)
+  if WEAPON_EQUIP[equipLoc] then
+    return "WEAPON"
+  end
+  if className == "Weapon" or className == "WEAPON" then
+    return "WEAPON"
+  end
+  if className == "Armor" or className == "ARMOR" then
+    return "ARMOR"
+  end
+  -- Numeric class ids used by some clients (2 weapon, 4 armor).
+  if className == 2 then
+    return "WEAPON"
+  end
+  if className == 4 then
+    return "ARMOR"
+  end
+  return nil
+end
+
+-- Resolve disenchant outcomes for an equipment item id via GetItemInfo when available.
+function Materials:GetOutcomesForItem(itemId)
+  if type(itemId) ~= "number" then
+    return nil
+  end
+  -- Enchanting mats are not disenchanted; skip.
+  if self:IsTracked(itemId) then
+    return nil
+  end
+
+  local name, _, quality, itemLevel, _, itemType, _, _, equipLoc
+  if GetItemInfo then
+    name, _, quality, itemLevel, _, itemType, _, _, equipLoc = GetItemInfo(itemId)
+  end
+  if not name and C_Item and C_Item.GetItemInfo then
+    name, _, quality, itemLevel, _, itemType, _, _, equipLoc = C_Item.GetItemInfo(itemId)
+  end
+  if not quality or not itemLevel then
+    return nil
+  end
+
+  local qualityKey = self:QualityKey(quality)
+  local typeKey = self:ClassifyItemType(itemType, equipLoc)
+  if not qualityKey or not typeKey then
+    return nil
+  end
+
+  local Tables = Disenchanter.Tables
+  if not Tables then
+    return nil
+  end
+  return Tables:GetOutcomes(qualityKey, typeKey, itemLevel), qualityKey, typeKey, itemLevel
+end
+
+-- Pure-Lua outcome lookup (tests / callers with explicit stats).
+function Materials:GetOutcomesForStats(qualityKey, typeKey, itemLevel)
+  local Tables = Disenchanter.Tables
+  if not Tables then
+    return nil
+  end
+  return Tables:GetOutcomes(qualityKey, typeKey, itemLevel)
+end
+
 Materials.BY_ID = BY_ID
+Materials.WEAPON_EQUIP = WEAPON_EQUIP
