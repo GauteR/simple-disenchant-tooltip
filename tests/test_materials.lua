@@ -1,4 +1,4 @@
--- Pure Lua tests for material lookup and link parsing.
+-- Pure Lua tests for material lookup, outcomes, and link parsing.
 -- Run: lua tests/test_materials.lua
 
 local root = arg[0]:match("^(.*)[/\\]") or "."
@@ -6,6 +6,7 @@ local addonRoot = root .. "/../disenchanter"
 
 dofile(addonRoot .. "/Config.lua")
 dofile(addonRoot .. "/Locale/enUS.lua")
+dofile(addonRoot .. "/Data/Tables.lua")
 dofile(addonRoot .. "/Data/Materials.lua")
 
 local failures = 0
@@ -29,8 +30,11 @@ local function assert_true(condition, message)
 end
 
 local Materials = Disenchanter.Materials
+local Tables = Disenchanter.Tables
 
 assert_eq(Disenchanter.Config.ENABLED, true, "Config.ENABLED defaults true")
+assert_eq(Disenchanter.Config.ITEM_OUTCOMES, true, "Config.ITEM_OUTCOMES defaults true")
+assert_eq(Disenchanter.Config.MATERIAL_SOURCES, true, "Config.MATERIAL_SOURCES defaults true")
 assert_eq(Disenchanter.Config.SLASH_COMMAND, "/disenchanter", "slash command")
 
 assert_true(Materials:IsTracked(10940), "Strange Dust tracked")
@@ -39,35 +43,48 @@ assert_true(not Materials:IsTracked(2589), "Linen Cloth not tracked")
 
 local strange = Materials:GetEntry(10940)
 assert_true(strange ~= nil, "Strange Dust entry exists")
-assert_eq(strange.sources[1].quality, "UNCOMMON", "Strange Dust primary quality")
-assert_eq(strange.sources[1].itemType, "ARMOR", "Strange Dust primary type")
-assert_eq(strange.sources[1].minLevel, 5, "Strange Dust minLevel")
-assert_eq(strange.sources[1].maxLevel, 25, "Strange Dust maxLevel")
-assert_true(strange.sources[2].secondary == true, "Strange Dust weapon source secondary")
+assert_true(#strange.sources >= 2, "Strange Dust has multiple source bands")
+assert_eq(strange.sources[1].chance, 80, "Strange Dust first band chance 80")
+assert_eq(strange.sources[1].quality, "UNCOMMON", "Strange Dust quality")
+assert_eq(strange.sources[1].itemType, "ARMOR", "Strange Dust first type armor")
 
-local essence = Materials:GetEntry(10939)
-assert_eq(essence.sources[1].itemType, "WEAPON", "Greater Magic primary weapon")
-assert_eq(essence.sources[1].minLevel, 16, "Greater Magic minLevel")
-assert_eq(essence.sources[1].maxLevel, 20, "Greater Magic maxLevel")
+local armorOut = Materials:GetOutcomesForStats("UNCOMMON", "ARMOR", 18)
+assert_true(armorOut ~= nil, "Uncommon armor ilvl 18 has outcomes")
+assert_eq(armorOut[1].id, 10940, "Armor 18 primary Strange Dust")
+assert_eq(armorOut[1].chance, 75, "Armor 18 Strange Dust 75%")
+assert_eq(armorOut[2].id, 10939, "Armor 18 Greater Magic")
+assert_eq(armorOut[3].chance, 5, "Armor 18 shard 5%")
 
-local shard = Materials:GetEntry(14344)
-assert_eq(shard.sources[1].quality, "RARE", "Large Brilliant primary rare")
-assert_eq(shard.sources[1].itemType, "ANY", "Large Brilliant any gear")
-assert_eq(shard.sources[1].minLevel, 56, "Large Brilliant minLevel")
-assert_eq(shard.sources[1].maxLevel, 65, "Large Brilliant maxLevel")
+local weaponOut = Materials:GetOutcomesForStats("UNCOMMON", "WEAPON", 18)
+assert_eq(weaponOut[1].id, 10939, "Weapon 18 primary Greater Magic")
+assert_eq(weaponOut[1].chance, 75, "Weapon 18 essence 75%")
 
-local crystal = Materials:GetEntry(20725)
-assert_eq(crystal.sources[1].quality, "EPIC", "Nexus Crystal epic")
-assert_eq(#crystal.sources, 1, "Nexus Crystal single primary source")
+local rareOut = Materials:GetOutcomesForStats("RARE", "ARMOR", 52)
+assert_eq(rareOut[1].id, 14343, "Rare 52 Small Brilliant Shard")
+assert_eq(rareOut[1].chance, 100, "Rare shard 100%")
+
+local epicOut = Materials:GetOutcomesForStats("EPIC", "WEAPON", 60)
+assert_eq(epicOut[1].id, 20725, "Epic 60 Nexus Crystal")
+assert_eq(epicOut[1].chance, 100, "Epic crystal 100%")
+
+assert_eq(Materials:GetOutcomesForStats("UNCOMMON", "ARMOR", 1), nil, "ilvl 1 no outcomes")
+assert_eq(Tables:GetMaterialName(16204), "Illusion Dust", "material name")
+
+assert_eq(Materials:ClassifyItemType("Armor", "INVTYPE_CHEST"), "ARMOR", "chest armor")
+assert_eq(Materials:ClassifyItemType("Armor", "INVTYPE_SHIELD"), "WEAPON", "shield as weapon")
+assert_eq(Materials:ClassifyItemType("Weapon", "INVTYPE_2HWEAPON"), "WEAPON", "2H weapon")
+assert_eq(Materials:QualityKey(2), "UNCOMMON", "quality 2")
+assert_eq(Materials:QualityKey(4), "EPIC", "quality 4")
 
 assert_eq(Materials:ParseItemId("|cffffffff|Hitem:10940::::::::|h[Strange Dust]|h|r"), 10940, "parse colored link")
 assert_eq(Materials:ParseItemId("item:16204:0:0:0"), 16204, "parse raw item string")
 assert_eq(Materials:ParseItemId(nil), nil, "parse nil")
 assert_eq(Materials:ParseItemId("not-an-item"), nil, "parse invalid")
 
--- Locale formatting used by tooltip lines
-local line = Disenchanter:T("SOURCE_LINE_FMT", "Uncommon", "Armor", 5, 25)
-assert_eq(line, "• Uncommon Armor, item level 5–25", "SOURCE_LINE_FMT")
+local line = Disenchanter:T("SOURCE_LINE_FMT", "Uncommon", "Armor", 5, 15, 80)
+assert_eq(line, "• Uncommon Armor, item level 5–15 — 80%", "SOURCE_LINE_FMT")
+local outLine = Disenchanter:T("OUTCOME_LINE_FMT", "Strange Dust", "1–2", 80)
+assert_eq(outLine, "• Strange Dust 1–2 — 80%", "OUTCOME_LINE_FMT")
 
 local count = 0
 for _ in pairs(Materials.BY_ID) do
