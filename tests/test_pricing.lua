@@ -86,6 +86,28 @@ local money = Pricing:FormatOutcomeExpected(dust)
 -- expected = 0.75 * 2.5 * 250 = 468.75 -> 469c = 4s 69c
 assert_eq(money, "4 " .. S .. " 69 " .. C, "FormatOutcomeExpected dust")
 
+-- Total across outcomes: priced + unpriced.
+local essence = { id = 10938, chance = 20, min = 1, max = 2 }
+Auctionator.API.v1.GetAuctionPriceByItemID = function(caller, itemId)
+  assert_eq(caller, "Disenchanter", "callerID is Disenchanter (total)")
+  if itemId == 10940 then
+    return 250
+  end
+  if itemId == 10938 then
+    return 100
+  end
+  return nil
+end
+-- dust 468.75 + essence 0.20 * 1.5 * 100 = 30 -> 498.75
+assert_eq(Pricing:TotalExpectedCopper({ dust, essence, shard }), 498.75, "total expected copper")
+assert_eq(Pricing:TotalExpectedCopper({ shard }), nil, "all unpriced -> nil total")
+assert_eq(Pricing:TotalExpectedCopper(nil), nil, "nil outcomes -> nil total")
+assert_eq(
+  Pricing:FormatTotalExpected({ dust, essence }),
+  "4 " .. S .. " 99 " .. C,
+  "FormatTotalExpected rounds 498.75 -> 4s 99c"
+)
+
 if failures > 0 then
   print(string.format("%d failure(s)", failures))
   os.exit(1)
