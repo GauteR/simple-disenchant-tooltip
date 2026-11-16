@@ -164,7 +164,7 @@ function Tooltip:AppendForItem(tooltip, itemId)
   if not itemId then
     return
   end
-  -- Skip re-entry for the same item this show (e.g. Auctionator price refresh).
+  -- Skip re-entry for the same item this show (e.g. Auctionator/TSM price refresh).
   if HasAppended(tooltip, itemId) then
     return
   end

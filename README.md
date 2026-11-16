@@ -2,21 +2,21 @@
 
 Tooltip helper for **World of Warcraft: Forever** that shows disenchant sources and expected outcomes.
 
-Hover materials to see the top farm sources, or hover gear to see all expected disenchant results (optionally with Auctionator prices).
+Hover materials to see the top farm sources, or hover gear to see all expected disenchant results (optionally with TSM or Auctionator prices).
 
 | | |
 | --- | --- |
 | Interface | `16001` (Forever / build line 1.60.x) |
 | Slash command | `/sdt` |
 | Language | English (UI and docs) |
-| Optional dep | Auctionator (outcome prices) |
+| Optional deps | TradeSkillMaster (preferred), Auctionator (outcome prices) |
 | Version | From git tag via `@project-version@` in TOC (see [`docs/RELEASE.md`](docs/RELEASE.md)) |
 
 ## Features
 
 - Material tooltips: top two disenchant farm sources (chance-colored)
 - Gear tooltips: all expected DE outcomes (chance-colored)
-- Optional Auctionator pricing on outcomes + Disenchant value line
+- Optional TSM (`DBMarket`) then Auctionator pricing on outcomes + Disenchant value line
 - Pure Lua unit tests for materials and pricing helpers
 - Minimal memory footprint
 
@@ -34,7 +34,7 @@ Hover materials to see the top farm sources, or hover gear to see all expected d
 
 - Hover a enchanting material (Strange Dust → Nexus Crystal) to see the two best item sources.
 - Hover disenchantable gear to see every expected outcome line.
-- With Auctionator and known AH prices, a **Disenchant** value appear when prices exist.
+- With TradeSkillMaster or Auctionator and known AH prices, a **Disenchant** value appears when prices exist (TSM first).
 - Line color by drop chance: green ≥75, yellow ≥35, gray otherwise.
 
 ## Configuration
@@ -47,7 +47,8 @@ Edit [`simple-disenchant-tooltip/Config.lua`](simple-disenchant-tooltip/Config.l
 | `MATERIAL_SOURCES` | `true` | Material hover: top two DE sources. |
 | `ITEM_OUTCOMES` | `true` | Gear hover: all expected DE outcomes. |
 | `OUTCOME_LEVEL_FALLBACK` | `true` | Clamp out-of-range item level to nearest Vanilla DE band (Forever low/high gear). |
-| `OUTCOME_PRICES` | `true` | Append Auctionator expected value when available. |
+| `OUTCOME_PRICES` | `true` | Append expected AH value when TSM or Auctionator has a price. |
+| `TSM_PRICE_SOURCE` | `"DBMarket"` | TSM custom price key used for material unit prices. |
 | `CHANCE_GREEN` | `75` | Chance threshold for green line color. |
 | `CHANCE_YELLOW` | `35` | Chance threshold for yellow line color. |
 | `SLASH_COMMAND` | `"/sdt"` | Documented slash command. |
