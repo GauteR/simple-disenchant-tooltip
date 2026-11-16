@@ -8,6 +8,8 @@ Disenchanter.Config = {
   MATERIAL_SOURCES = true,
   -- Gear hover: all expected DE outcomes (chance-colored).
   ITEM_OUTCOMES = true,
+  -- Append expected AH value per outcome when Auctionator DB has a price.
+  OUTCOME_PRICES = true,
   -- Tooltip line colors by drop chance: green / yellow / gray.
   CHANCE_GREEN = 75,
   CHANCE_YELLOW = 35,

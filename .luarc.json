@@ -38,7 +38,8 @@
       "GameFontNormalLarge",
       "Settings",
       "C_AddOns",
-      "GetAddOnMetadata"
+      "GetAddOnMetadata",
+      "Auctionator"
     ]
   },
   "workspace": {
