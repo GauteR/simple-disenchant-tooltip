@@ -10,7 +10,7 @@ Local packaging uses [BigWigsMods/packager](https://github.com/BigWigsMods/packa
 - `lua` on PATH (for unit tests), or pass `-SkipTests` / `--skip-tests`
 - `curl` (for upload)
 - `jq` on PATH when uploading (not required for dry-run)
-- `zip`, or a zip fallback (`tar.exe -a` on Windows, `python3` on Unix)
+- `zip` on PATH, or Python (`python`/`python3`) as fallback for a real ZIP (do not use Windows `tar.exe -a`)
 
 **Windows extras**
 
@@ -24,11 +24,11 @@ Local packaging uses [BigWigsMods/packager](https://github.com/BigWigsMods/packa
    - `CF_API_TOKEN` — CurseForge
    - `WAGO_API_TOKEN` — Wago Addons  
    Both `scripts/release.ps1` and `scripts/release.sh` load `.release/.env` (and optionally repo-root `.env`) into the process environment before calling the packager. Do not commit either env file.
-3. When CurseForge / Wago projects exist, add these lines to [`simple-disenchant-tooltip/simple-disenchant-tooltip.toc`](../simple-disenchant-tooltip/simple-disenchant-tooltip.toc):
-   - `## X-Curse-Project-ID: <id>`
-   - `## X-Wago-ID: <id>`
+3. TOC project IDs in [`simple-disenchant-tooltip/simple-disenchant-tooltip.toc`](../simple-disenchant-tooltip/simple-disenchant-tooltip.toc):
+   - `## X-Curse-Project-ID: 1809310` (set)
+   - `## X-Wago-ID: <id>` when a Wago project exists
 
-Until those IDs exist, omit the lines (dry-run packaging still works; upload needs real IDs + tokens).
+Omit Wago until that project exists (dry-run packaging still works; upload needs tokens in `.release/.env`).
 
 ## Versioning
 
