@@ -1,4 +1,4 @@
-# Disenchanter
+# Simple Disenchant Tooltip
 
 Tooltip helper for **World of Warcraft: Forever** that shows disenchant sources and expected outcomes.
 
