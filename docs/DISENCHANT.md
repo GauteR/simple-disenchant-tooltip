@@ -17,6 +17,7 @@ Linjefarge etter drop-sjanse: **grønn** ≥ `CHANCE_GREEN` (75), **gul** ≥ `C
 
 - Material-hover: `Config.MATERIAL_SOURCES` (topp 2 sammenslåtte kilder)
 - Gear-hover: `Config.ITEM_OUTCOMES` (alle outcomes; krever `GetItemInfo` / `C_Item.GetItemInfo`)
+- Ilvl utenfor Vanilla-bånd: `Config.OUTCOME_LEVEL_FALLBACK` klamper til **nærmeste** band (f.eks. Rare under ilvl 16 → Small Glimmering; Uncommon over 65 → topp Illusion-band). Forever lavnivå-blues som Gemmed Copper Boots.
 - Gear-priser: `Config.OUTCOME_PRICES` — under outcome-linjer (kun navn/antall, sjanssefarget): `AddDoubleLine` **Disenchant** (gul etikett, hvit myntverdi) med forventet AH-verdi for det **mest sannsynlige** utfallet via Auctionator (`OptionalDeps`). Formel: `(sjanse/100) × snittantall × enhetspris`. MoneyFrame-ikoner; null-denominationer skjules. Mangler pris på topp-utfallet → ingen Disenchant-linje.
 - Master-flag: `Config.ENABLED`
 - Shield / off-hand telles som **WEAPON** i DE-tabellene (essence-primær)

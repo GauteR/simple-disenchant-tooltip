@@ -19,6 +19,7 @@ See where Vanilla enchanting materials come from, and what gear is expected to d
 
 - Material hover: top two farm sources (chance-colored)
 - Gear hover: all expected disenchant outcomes
+- Out-of-range item levels use the nearest Vanilla disenchant band (Forever low/high gear)
 - Optional Auctionator expected value and Disenchant total
 - Slash `/sdt` for status
 - Feature flags to turn tooltip lines on or off
