@@ -16,10 +16,9 @@ Hover materials to see the top farm sources, or hover gear to see all expected d
 
 - Material tooltips: top two disenchant farm sources (chance-colored)
 - Gear tooltips: all expected DE outcomes (chance-colored)
-- Optional Auctionator pricing on outcomes + Disenchant total line
-- Options panel
+- Optional Auctionator pricing on outcomes + Disenchant value line
 - Pure Lua unit tests for materials and pricing helpers
-- Minimal code footprint
+- Minimal memory footprint
 
 ## Install
 
@@ -35,7 +34,7 @@ Hover materials to see the top farm sources, or hover gear to see all expected d
 
 - Hover a enchanting material (Strange Dust → Nexus Crystal) to see the two best item sources.
 - Hover disenchantable gear to see every expected outcome line.
-- With Auctionator and known AH prices, a **Disenchant** total appear when prices exist.
+- With Auctionator and known AH prices, a **Disenchant** value appear when prices exist.
 - Line color by drop chance: green ≥75, yellow ≥35, gray otherwise.
 
 ## Configuration
