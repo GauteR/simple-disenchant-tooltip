@@ -145,6 +145,15 @@ function Tooltip:AppendOutcomes(tooltip, itemId)
     -- No AddLine RGB: chance color is embedded so coin icons stay untinted.
     tooltip:AddLine(FormatOutcomeLine(outcome, r, g, b))
   end
+
+  -- Auctionator-style summary: yellow "Disenchant" left, total expected right (no ~).
+  if Config.OUTCOME_PRICES == true and Disenchanter.Pricing and tooltip.AddDoubleLine then
+    local totalMoney = Disenchanter.Pricing:FormatTotalExpected(outcomes)
+    if totalMoney then
+      local yr, yg, yb = 1, 0.82, 0
+      tooltip:AddDoubleLine(Disenchanter:T("DISENCHANT_TOTAL"), totalMoney, yr, yg, yb, yr, yg, yb)
+    end
+  end
   return true
 end
 

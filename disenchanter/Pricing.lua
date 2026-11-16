@@ -94,3 +94,34 @@ function Pricing:FormatOutcomeExpected(outcome)
   end
   return self:FormatMoney(expected)
 end
+
+-- Sum expected copper across outcomes that have Auctionator prices.
+function Pricing:TotalExpectedCopper(outcomes)
+  if type(outcomes) ~= "table" then
+    return nil
+  end
+  local total = 0
+  local any = false
+  for i = 1, #outcomes do
+    local outcome = outcomes[i]
+    local unitPrice = self:GetAuctionPrice(outcome and outcome.id)
+    local expected = self:ExpectedCopper(outcome, unitPrice)
+    if expected then
+      total = total + expected
+      any = true
+    end
+  end
+  if not any then
+    return nil
+  end
+  return total
+end
+
+-- Total expected money string for a gear tooltip, or nil when no prices.
+function Pricing:FormatTotalExpected(outcomes)
+  local total = self:TotalExpectedCopper(outcomes)
+  if not total then
+    return nil
+  end
+  return self:FormatMoney(total)
+end

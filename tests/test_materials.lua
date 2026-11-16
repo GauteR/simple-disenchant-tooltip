@@ -81,6 +81,7 @@ local outLine = Disenchanter:T("OUTCOME_LINE_FMT", "Strange Dust", "2–3")
 assert_eq(outLine, "Strange Dust 2–3", "OUTCOME_LINE_FMT")
 local priced = Disenchanter:T("OUTCOME_LINE_PRICE_FMT", "Strange Dust", "1–2", "1g")
 assert_eq(priced, "Strange Dust 1–2, ~1g", "OUTCOME_LINE_PRICE_FMT")
+assert_eq(Disenchanter:T("DISENCHANT_TOTAL"), "Disenchant", "DISENCHANT_TOTAL label")
 assert_eq(Disenchanter.Config.OUTCOME_PRICES, true, "OUTCOME_PRICES defaults true")
 
 local count = 0
