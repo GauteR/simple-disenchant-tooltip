@@ -1,6 +1,6 @@
 # Disenchanter
 
-Tooltip helper for **World of Warcraft: Forever** that shows Vanilla Classic disenchant sources and expected outcomes.
+Tooltip helper for **World of Warcraft: Forever** that shows disenchant sources and expected outcomes.
 
 Hover materials to see the top farm sources, or hover gear to see all expected disenchant results (optionally with Auctionator prices).
 
