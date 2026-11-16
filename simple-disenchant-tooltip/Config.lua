@@ -8,6 +8,8 @@ SimpleDisenchantTooltip.Config = {
   MATERIAL_SOURCES = true,
   -- Gear hover: all expected DE outcomes (chance-colored).
   ITEM_OUTCOMES = true,
+  -- When ilvl is outside Vanilla DE bands, use nearest band (Forever low/high gear).
+  OUTCOME_LEVEL_FALLBACK = true,
   -- Append Disenchant line with most-likely outcome AH value (Auctionator).
   OUTCOME_PRICES = true,
   -- Tooltip line colors by drop chance: green / yellow / gray.
@@ -15,6 +17,6 @@ SimpleDisenchantTooltip.Config = {
   CHANCE_YELLOW = 35,
   ADDON_NAME = "Simple Disenchant Tooltip",
   -- Shown in Options when TOC ## Version: @project-version@ is not packaged yet.
-  VERSION = "1.0.0",
+  VERSION = "1.1.0",
   SLASH_COMMAND = "/sdt",
 }

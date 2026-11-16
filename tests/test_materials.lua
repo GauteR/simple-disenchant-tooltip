@@ -65,6 +65,22 @@ assert_eq(sorted[1].chance, 75, "Armor 18 dust 75%")
 assert_eq(sorted[2].chance, 20, "Armor 18 essence 20%")
 assert_eq(sorted[3].chance, 5, "Armor 18 shard 5%")
 
+-- Forever low-level rare (e.g. Gemmed Copper Boots): below Vanilla rare bands.
+assert_eq(SimpleDisenchantTooltip.Config.OUTCOME_LEVEL_FALLBACK, true, "OUTCOME_LEVEL_FALLBACK defaults true")
+local rareLow = Materials:GetOutcomesForStats("RARE", "ARMOR", 10)
+assert_true(rareLow ~= nil, "Rare ilvl 10 fallback yields outcomes")
+assert_eq(#rareLow, 1, "Rare fallback one shard outcome")
+assert_eq(rareLow[1].id, 10978, "Rare ilvl 10 -> Small Glimmering Shard")
+assert_eq(rareLow[1].chance, 100, "Rare fallback 100%")
+
+local uncommonHigh = Materials:GetOutcomesForStats("UNCOMMON", "ARMOR", 70)
+assert_true(uncommonHigh ~= nil, "Uncommon ilvl 70 clamps to top band")
+assert_eq(uncommonHigh[1].id, 16204, "Uncommon ilvl 70 -> Illusion Dust band")
+
+SimpleDisenchantTooltip.Config.OUTCOME_LEVEL_FALLBACK = false
+assert_eq(Materials:GetOutcomesForStats("RARE", "ARMOR", 10), nil, "Rare ilvl 10 nil when fallback off")
+SimpleDisenchantTooltip.Config.OUTCOME_LEVEL_FALLBACK = true
+
 local r1, g1 = Materials:ChanceColor(80)
 assert_true(g1 > 0.9 and r1 < 0.3, "80% is green")
 local r2, g2 = Materials:ChanceColor(50)
