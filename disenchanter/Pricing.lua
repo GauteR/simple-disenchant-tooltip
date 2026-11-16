@@ -95,33 +95,34 @@ function Pricing:FormatOutcomeExpected(outcome)
   return self:FormatMoney(expected)
 end
 
--- Sum expected copper across outcomes that have Auctionator prices.
-function Pricing:TotalExpectedCopper(outcomes)
-  if type(outcomes) ~= "table" then
+-- Highest-chance outcome (ties keep first). Assumes caller may pre-sort.
+function Pricing:MostLikelyOutcome(outcomes)
+  if type(outcomes) ~= "table" or #outcomes == 0 then
     return nil
   end
-  local total = 0
-  local any = false
-  for i = 1, #outcomes do
+  local best = outcomes[1]
+  local bestChance = (best and best.chance) or -1
+  for i = 2, #outcomes do
     local outcome = outcomes[i]
-    local unitPrice = self:GetAuctionPrice(outcome and outcome.id)
-    local expected = self:ExpectedCopper(outcome, unitPrice)
-    if expected then
-      total = total + expected
-      any = true
+    local chance = (outcome and outcome.chance) or -1
+    if chance > bestChance then
+      best = outcome
+      bestChance = chance
     end
   end
-  if not any then
-    return nil
-  end
-  return total
+  return best
 end
 
--- Total expected money string for a gear tooltip, or nil when no prices.
-function Pricing:FormatTotalExpected(outcomes)
-  local total = self:TotalExpectedCopper(outcomes)
-  if not total then
+-- Expected copper for the most likely outcome, or nil when unpriced.
+function Pricing:LikelyExpectedCopper(outcomes)
+  local outcome = self:MostLikelyOutcome(outcomes)
+  if not outcome then
     return nil
   end
-  return self:FormatMoney(total)
+  return self:ExpectedCopper(outcome, self:GetAuctionPrice(outcome.id))
+end
+
+-- Money string for the most likely outcome (Vendor/Auction Disenchant line).
+function Pricing:FormatLikelyExpected(outcomes)
+  return self:FormatOutcomeExpected(self:MostLikelyOutcome(outcomes))
 end

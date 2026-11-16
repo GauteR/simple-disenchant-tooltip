@@ -86,10 +86,10 @@ local money = Pricing:FormatOutcomeExpected(dust)
 -- expected = 0.75 * 2.5 * 250 = 468.75 -> 469c = 4s 69c
 assert_eq(money, "4 " .. S .. " 69 " .. C, "FormatOutcomeExpected dust")
 
--- Total across outcomes: priced + unpriced.
+-- Most likely outcome value (not sum of all).
 local essence = { id = 10938, chance = 20, min = 1, max = 2 }
 Auctionator.API.v1.GetAuctionPriceByItemID = function(caller, itemId)
-  assert_eq(caller, "Disenchanter", "callerID is Disenchanter (total)")
+  assert_eq(caller, "Disenchanter", "callerID is Disenchanter (likely)")
   if itemId == 10940 then
     return 250
   end
@@ -98,14 +98,15 @@ Auctionator.API.v1.GetAuctionPriceByItemID = function(caller, itemId)
   end
   return nil
 end
--- dust 468.75 + essence 0.20 * 1.5 * 100 = 30 -> 498.75
-assert_eq(Pricing:TotalExpectedCopper({ dust, essence, shard }), 498.75, "total expected copper")
-assert_eq(Pricing:TotalExpectedCopper({ shard }), nil, "all unpriced -> nil total")
-assert_eq(Pricing:TotalExpectedCopper(nil), nil, "nil outcomes -> nil total")
+-- dust chance 75 > essence 20 -> dust EV 468.75 (ignore essence 30)
+assert_eq(Pricing:MostLikelyOutcome({ essence, dust }).id, 10940, "most likely is dust")
+assert_eq(Pricing:LikelyExpectedCopper({ essence, dust, shard }), 468.75, "likely expected copper")
+assert_eq(Pricing:LikelyExpectedCopper({ shard }), nil, "unpriced most-likely -> nil")
+assert_eq(Pricing:LikelyExpectedCopper(nil), nil, "nil outcomes -> nil")
 assert_eq(
-  Pricing:FormatTotalExpected({ dust, essence }),
-  "4 " .. S .. " 99 " .. C,
-  "FormatTotalExpected rounds 498.75 -> 4s 99c"
+  Pricing:FormatLikelyExpected({ essence, dust }),
+  "4 " .. S .. " 69 " .. C,
+  "FormatLikelyExpected uses dust not sum"
 )
 
 if failures > 0 then
