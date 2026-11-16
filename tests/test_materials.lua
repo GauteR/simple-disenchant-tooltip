@@ -2,7 +2,7 @@
 -- Run: lua tests/test_materials.lua
 
 local root = arg[0]:match("^(.*)[/\\]") or "."
-local addonRoot = root .. "/../disenchanter"
+local addonRoot = root .. "/../simple-disenchant-tooltip"
 
 dofile(addonRoot .. "/Config.lua")
 dofile(addonRoot .. "/Locale/enUS.lua")
@@ -29,12 +29,12 @@ local function assert_true(condition, message)
   end
 end
 
-local Materials = Disenchanter.Materials
-local Tables = Disenchanter.Tables
+local Materials = SimpleDisenchantTooltip.Materials
+local Tables = SimpleDisenchantTooltip.Tables
 
-assert_eq(Disenchanter.Config.ENABLED, true, "Config.ENABLED defaults true")
-assert_eq(Disenchanter.Config.CHANCE_GREEN, 75, "CHANCE_GREEN")
-assert_eq(Disenchanter.Config.CHANCE_YELLOW, 35, "CHANCE_YELLOW")
+assert_eq(SimpleDisenchantTooltip.Config.ENABLED, true, "Config.ENABLED defaults true")
+assert_eq(SimpleDisenchantTooltip.Config.CHANCE_GREEN, 75, "CHANCE_GREEN")
+assert_eq(SimpleDisenchantTooltip.Config.CHANCE_YELLOW, 35, "CHANCE_YELLOW")
 
 assert_true(Materials:IsTracked(10940), "Strange Dust tracked")
 assert_true(not Materials:IsTracked(2589), "Linen Cloth not tracked")
@@ -75,12 +75,12 @@ assert_true(r3 < 0.7 and g3 < 0.7 and b3 < 0.7, "10% is gray")
 assert_eq(Materials:ClassifyItemType("Armor", "INVTYPE_SHIELD"), "WEAPON", "shield as weapon")
 assert_eq(Tables:GetMaterialName(16204), "Illusion Dust", "material name")
 
-local line = Disenchanter:T("SOURCE_LINE_FMT", "Uncommon", "Armor", 5, 25)
+local line = SimpleDisenchantTooltip:T("SOURCE_LINE_FMT", "Uncommon", "Armor", 5, 25)
 assert_eq(line, "Uncommon Armor, item level 5–25", "SOURCE_LINE_FMT")
-local outLine = Disenchanter:T("OUTCOME_LINE_FMT", "Strange Dust", "2–3")
+local outLine = SimpleDisenchantTooltip:T("OUTCOME_LINE_FMT", "Strange Dust", "2–3")
 assert_eq(outLine, "Strange Dust 2–3", "OUTCOME_LINE_FMT")
-assert_eq(Disenchanter:T("DISENCHANT_TOTAL"), "Disenchant", "DISENCHANT_TOTAL label")
-assert_eq(Disenchanter.Config.OUTCOME_PRICES, true, "OUTCOME_PRICES defaults true")
+assert_eq(SimpleDisenchantTooltip:T("DISENCHANT_TOTAL"), "Disenchant", "DISENCHANT_TOTAL label")
+assert_eq(SimpleDisenchantTooltip.Config.OUTCOME_PRICES, true, "OUTCOME_PRICES defaults true")
 
 local count = 0
 for _ in pairs(Materials.BY_ID) do

@@ -1,9 +1,9 @@
 -- Vanilla Classic (1.12) forward disenchant tables.
 -- Each range lists expected outcomes: material item id, chance %, quantity min/max.
-Disenchanter = Disenchanter or {}
-Disenchanter.Tables = Disenchanter.Tables or {}
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
+SimpleDisenchantTooltip.Tables = SimpleDisenchantTooltip.Tables or {}
 
-local Tables = Disenchanter.Tables
+local Tables = SimpleDisenchantTooltip.Tables
 
 -- Material display names for tooltips/tests when GetItemInfo is unavailable.
 Tables.MATERIAL_NAMES = {

@@ -1,7 +1,7 @@
 -- Feature flags and shared addon settings for WoW Forever.
-Disenchanter = Disenchanter or {}
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
 
-Disenchanter.Config = {
+SimpleDisenchantTooltip.Config = {
   -- Set to false to disable slash command, Options actions, and tooltip lines.
   ENABLED = true,
   -- Material hover: top two DE sources (chance-colored).
@@ -13,8 +13,8 @@ Disenchanter.Config = {
   -- Tooltip line colors by drop chance: green / yellow / gray.
   CHANCE_GREEN = 75,
   CHANCE_YELLOW = 35,
-  ADDON_NAME = "Disenchanter",
+  ADDON_NAME = "Simple Disenchant Tooltip",
   -- Shown in Options when TOC ## Version: @project-version@ is not packaged yet.
   VERSION = "1.0.0",
-  SLASH_COMMAND = "/disenchanter",
+  SLASH_COMMAND = "/sdt",
 }

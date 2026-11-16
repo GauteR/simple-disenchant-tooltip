@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Run unit tests, then package Disenchanter with BigWigs release.sh (optional upload).
+  Run unit tests, then package Simple Disenchant Tooltip with BigWigs release.sh (optional upload).
 
 .PARAMETER DryRun
   Skip CurseForge/Wago/GitHub upload (passes -d to release.sh).
@@ -148,9 +148,9 @@ if ($LASTEXITCODE -ne 0) {
   Write-Error "release.sh failed (exit $LASTEXITCODE)."
 }
 
-$packageDir = Join-Path $RepoRoot ".release\disenchanter"
-if (-not (Test-Path (Join-Path $packageDir "disenchanter.toc"))) {
-  Write-Error "Expected packaged TOC at .release/disenchanter/disenchanter.toc"
+$packageDir = Join-Path $RepoRoot ".release\simple-disenchant-tooltip"
+if (-not (Test-Path (Join-Path $packageDir "simple-disenchant-tooltip.toc"))) {
+  Write-Error "Expected packaged TOC at .release/simple-disenchant-tooltip/simple-disenchant-tooltip.toc"
 }
 $forbidden = @("docs", "tests", "scripts")
 foreach ($name in $forbidden) {
@@ -160,12 +160,12 @@ foreach ($name in $forbidden) {
 }
 
 if ($useTarZip) {
-  $toc = Get-Content (Join-Path $packageDir "disenchanter.toc") -Raw
+  $toc = Get-Content (Join-Path $packageDir "simple-disenchant-tooltip.toc") -Raw
   $version = "unknown"
   if ($toc -match '(?m)^## Version:\s*(.+)\s*$') {
     $version = $Matches[1].Trim()
   }
-  $zipName = "disenchanter-$version-forever.zip"
+  $zipName = "simple-disenchant-tooltip-$version-forever.zip"
   $zipPath = Join-Path (Join-Path $RepoRoot ".release") $zipName
   Write-Host "==> Creating $zipName with tar.exe"
   New-ReleaseZip -PackageDir $packageDir -ZipPath $zipPath

@@ -1,5 +1,5 @@
 <!--
-  CurseForge / Wago project description for Disenchanter.
+  CurseForge / Wago project description for Simple Disenchant Tooltip.
 
   How to use:
   1. Copy everything below the horizontal rule.
@@ -9,7 +9,7 @@
 
 ---
 
-# Disenchanter
+# Simple Disenchant Tooltip
 
 Disenchant tooltip helper for **World of Warcraft: Forever**.
 
@@ -20,17 +20,17 @@ See where Vanilla enchanting materials come from, and what gear is expected to d
 - Material hover: top two farm sources (chance-colored)
 - Gear hover: all expected disenchant outcomes
 - Optional Auctionator expected value and Disenchant total
-- Slash `/disenchanter` for status
+- Slash `/sdt` for status
 - Feature flags to turn tooltip lines on or off
 
 ## Install
 
-1. Install via CurseForge / your preferred client, **or** copy the `disenchanter` folder to:
+1. Install via CurseForge / your preferred client, **or** copy the `simple-disenchant-tooltip` folder to:
 
-   `World of Warcraft\_forever_\Interface\AddOns\disenchanter`
+   `World of Warcraft\_forever_\Interface\AddOns\simple-disenchant-tooltip`
 
 2. Restart the client or log out and back in.
-3. Enable **Disenchanter** on the character addon list if needed.
+3. Enable **Simple Disenchant Tooltip** on the character addon list if needed.
 
 **Requires Forever** (`Interface` 16001 / 1.60.x). Not for Classic Era or Retail.
 

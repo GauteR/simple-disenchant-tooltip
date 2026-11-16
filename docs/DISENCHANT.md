@@ -1,4 +1,4 @@
-# Disenchanter — datakilde
+# Simple Disenchant Tooltip — datakilde
 
 Addonen viser disenchant-linjer i tooltips:
 

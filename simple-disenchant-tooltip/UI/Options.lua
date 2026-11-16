@@ -1,9 +1,9 @@
--- Options → AddOns → Disenchanter: about panel.
-Disenchanter = Disenchanter or {}
-Disenchanter.Options = Disenchanter.Options or {}
+-- Options → AddOns → Simple Disenchant Tooltip: about panel.
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
+SimpleDisenchantTooltip.Options = SimpleDisenchantTooltip.Options or {}
 
-local Options = Disenchanter.Options
-local ADDON_FOLDER = "disenchanter"
+local Options = SimpleDisenchantTooltip.Options
+local ADDON_FOLDER = "simple-disenchant-tooltip"
 
 local function GetMeta(field, fallback)
   local value
@@ -24,8 +24,8 @@ local function GetDisplayVersion()
   if meta and not string.find(meta, "@", 1, true) then
     return meta
   end
-  if Disenchanter.Config and Disenchanter.Config.VERSION then
-    return Disenchanter.Config.VERSION
+  if SimpleDisenchantTooltip.Config and SimpleDisenchantTooltip.Config.VERSION then
+    return SimpleDisenchantTooltip.Config.VERSION
   end
   return "?"
 end
@@ -38,8 +38,8 @@ function Options:Initialize()
     return
   end
 
-  local panel = CreateFrame("Frame", "DisenchanterOptionsPanel")
-  panel.name = GetMeta("Title", Disenchanter:T("ADDON_NAME"))
+  local panel = CreateFrame("Frame", "SimpleDisenchantTooltipOptionsPanel")
+  panel.name = GetMeta("Title", SimpleDisenchantTooltip:T("ADDON_NAME"))
   panel:Hide()
 
   -- Required by the Settings canvas layout even when unused.
@@ -61,7 +61,7 @@ function Options:Initialize()
 
   local version = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
   version:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
-  version:SetText(Disenchanter:T("OPTIONS_VERSION_FMT", GetDisplayVersion()))
+  version:SetText(SimpleDisenchantTooltip:T("OPTIONS_VERSION_FMT", GetDisplayVersion()))
 
   local help = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
   help:SetPoint("TOPLEFT", icon, "BOTTOMLEFT", 0, -20)
@@ -69,7 +69,7 @@ function Options:Initialize()
   help:SetJustifyH("LEFT")
   help:SetJustifyV("TOP")
   help:SetWordWrap(true)
-  help:SetText(Disenchanter:T("OPTIONS_HELP"))
+  help:SetText(SimpleDisenchantTooltip:T("OPTIONS_HELP"))
 
   local ok, category = pcall(Settings.RegisterCanvasLayoutCategory, panel, panel.name)
   if not ok or not category then

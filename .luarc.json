@@ -19,11 +19,11 @@
   },
   "diagnostics": {
     "globals": [
-      "Disenchanter",
+      "SimpleDisenchantTooltip",
       "DEFAULT_CHAT_FRAME",
       "CreateFrame",
       "SlashCmdList",
-      "SLASH_DISENCHANTER1",
+      "SLASH_SIMPLEDISENCHANTTOOLTIP1",
       "GameTooltip",
       "ItemRefTooltip",
       "ShoppingTooltip1",

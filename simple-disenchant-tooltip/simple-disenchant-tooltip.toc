@@ -1,5 +1,5 @@
 ## Interface: 16001
-## Title: Disenchanter
+## Title: Simple Disenchant Tooltip
 ## Notes: Shows Vanilla Classic disenchant sources and expected outcomes on item tooltips.
 ## Author: Neema
 ## Version: @project-version@

@@ -1,11 +1,11 @@
-﻿#Requires -Version 5.1
+#Requires -Version 5.1
 <#
 .SYNOPSIS
-  Copy the disenchanter addon into a local Forever AddOns folder for in-game testing.
+  Copy the simple-disenchant-tooltip addon into a local Forever AddOns folder for in-game testing.
 
 .PARAMETER Destination
-  Full path to the AddOns directory (parent of the disenchanter folder), or to the
-  disenchanter folder itself. Overrides env DISENCHANTER_FOREVER_ADDONS.
+  Full path to the AddOns directory (parent of the simple-disenchant-tooltip folder), or to the
+  simple-disenchant-tooltip folder itself. Overrides env SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS.
 
 .PARAMETER SkipTests
   Skip lua tests/test_materials.lua.
@@ -21,7 +21,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$Source = Join-Path $RepoRoot "disenchanter"
+$Source = Join-Path $RepoRoot "simple-disenchant-tooltip"
 
 # Read Config.VERSION for local TOC substitution (packager uses @project-version@ at release).
 function Get-ConfigVersion {
@@ -61,15 +61,15 @@ function Resolve-ForeverAddOnsDir {
 
   if ($Explicit) {
     $p = $Explicit.TrimEnd('\', '/')
-    if ((Split-Path -Leaf $p) -eq "disenchanter") {
+    if ((Split-Path -Leaf $p) -eq "simple-disenchant-tooltip") {
       return (Split-Path -Parent $p)
     }
     return $p
   }
 
-  if ($env:DISENCHANTER_FOREVER_ADDONS) {
-    $p = $env:DISENCHANTER_FOREVER_ADDONS.TrimEnd('\', '/')
-    if ((Split-Path -Leaf $p) -eq "disenchanter") {
+  if ($env:SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS) {
+    $p = $env:SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS.TrimEnd('\', '/')
+    if ((Split-Path -Leaf $p) -eq "simple-disenchant-tooltip") {
       return (Split-Path -Parent $p)
     }
     return $p
@@ -86,7 +86,7 @@ function Resolve-ForeverAddOnsDir {
     }
     if ($pathLine) {
       $p = $pathLine.TrimEnd('\', '/')
-      if ((Split-Path -Leaf $p) -eq "disenchanter") {
+      if ((Split-Path -Leaf $p) -eq "simple-disenchant-tooltip") {
         return (Split-Path -Parent $p)
       }
       return $p
@@ -107,8 +107,8 @@ function Resolve-ForeverAddOnsDir {
   return $null
 }
 
-if (-not (Test-Path (Join-Path $Source "disenchanter.toc"))) {
-  Write-Error "Missing addon source at $Source (expected disenchanter.toc)."
+if (-not (Test-Path (Join-Path $Source "simple-disenchant-tooltip.toc"))) {
+  Write-Error "Missing addon source at $Source (expected simple-disenchant-tooltip.toc)."
 }
 
 if (-not $SkipTests) {
@@ -127,7 +127,7 @@ $addonsDir = Resolve-ForeverAddOnsDir -Explicit $Destination
 if (-not $addonsDir) {
   Write-Error @"
 Could not find Forever AddOns folder.
-Pass -Destination, set DISENCHANTER_FOREVER_ADDONS, or create scripts/forever-addons.path
+Pass -Destination, set SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS, or create scripts/forever-addons.path
 with one line, e.g.:
   D:\World of Warcraft\_forever_\Interface\AddOns
 "@
@@ -137,7 +137,7 @@ if (-not (Test-Path $addonsDir)) {
   Write-Error "AddOns directory does not exist: $addonsDir"
 }
 
-$target = Join-Path $addonsDir "disenchanter"
+$target = Join-Path $addonsDir "simple-disenchant-tooltip"
 Write-Host "==> Publishing $Source"
 Write-Host "    -> $target"
 
@@ -157,7 +157,7 @@ if (Test-Path $target) {
 New-Item -ItemType Directory -Path $target -Force | Out-Null
 Copy-Item -Path (Join-Path $Source "*") -Destination $target -Recurse -Force
 
-$toc = Join-Path $target "disenchanter.toc"
+$toc = Join-Path $target "simple-disenchant-tooltip.toc"
 if (-not (Test-Path $toc)) {
   Write-Error "Publish failed: missing $toc"
 }
