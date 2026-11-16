@@ -1,11 +1,11 @@
 -- Material reverse lookup and item classification helpers.
-Disenchanter = Disenchanter or {}
-Disenchanter.Materials = Disenchanter.Materials or {}
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
+SimpleDisenchantTooltip.Materials = SimpleDisenchantTooltip.Materials or {}
 
-local Materials = Disenchanter.Materials
+local Materials = SimpleDisenchantTooltip.Materials
 
 -- Built from Tables.FORWARD (percentages per band).
-local BY_ID = Disenchanter.Tables:BuildMaterialSources()
+local BY_ID = SimpleDisenchantTooltip.Tables:BuildMaterialSources()
 
 -- Equip locations treated as weapons for Classic DE (essence-primary).
 local WEAPON_EQUIP = {
@@ -47,7 +47,7 @@ function Materials:ParseItemId(link)
 end
 
 function Materials:GetMaterialName(itemId)
-  local Tables = Disenchanter.Tables
+  local Tables = SimpleDisenchantTooltip.Tables
   if Tables and Tables.GetMaterialName then
     return Tables:GetMaterialName(itemId)
   end
@@ -114,7 +114,7 @@ function Materials:GetOutcomesForItem(itemId)
     return nil
   end
 
-  local Tables = Disenchanter.Tables
+  local Tables = SimpleDisenchantTooltip.Tables
   if not Tables then
     return nil
   end
@@ -123,7 +123,7 @@ end
 
 -- Pure-Lua outcome lookup (tests / callers with explicit stats).
 function Materials:GetOutcomesForStats(qualityKey, typeKey, itemLevel)
-  local Tables = Disenchanter.Tables
+  local Tables = SimpleDisenchantTooltip.Tables
   if not Tables then
     return nil
   end
@@ -132,7 +132,7 @@ end
 
 -- RGB for tooltip lines: >= greenThresh green, >= yellowThresh yellow, else gray.
 function Materials:ChanceColor(chance)
-  local Config = Disenchanter.Config or {}
+  local Config = SimpleDisenchantTooltip.Config or {}
   local greenAt = Config.CHANCE_GREEN or 75
   local yellowAt = Config.CHANCE_YELLOW or 35
   if type(chance) ~= "number" then

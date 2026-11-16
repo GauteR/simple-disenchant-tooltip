@@ -1,8 +1,8 @@
 -- Auctionator soft-dep: market prices and expected DE copper values.
-Disenchanter = Disenchanter or {}
-Disenchanter.Pricing = Disenchanter.Pricing or {}
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
+SimpleDisenchantTooltip.Pricing = SimpleDisenchantTooltip.Pricing or {}
 
-local Pricing = Disenchanter.Pricing
+local Pricing = SimpleDisenchantTooltip.Pricing
 
 -- Classic MoneyFrame coin textures (texture escape sequences).
 local GOLD_ICON = "|TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0|t"
@@ -74,7 +74,7 @@ function Pricing:GetAuctionPrice(itemId)
   if type(fn) ~= "function" then
     return nil
   end
-  local callerId = (Disenchanter.Config and Disenchanter.Config.ADDON_NAME) or "Disenchanter"
+  local callerId = (SimpleDisenchantTooltip.Config and SimpleDisenchantTooltip.Config.ADDON_NAME) or "Simple Disenchant Tooltip"
   local ok, price = pcall(fn, callerId, itemId)
   if not ok or type(price) ~= "number" or price <= 0 then
     return nil

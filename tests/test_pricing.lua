@@ -2,7 +2,7 @@
 -- Run: lua tests/test_pricing.lua
 
 local root = arg[0]:match("^(.*)[/\\]") or "."
-local addonRoot = root .. "/../disenchanter"
+local addonRoot = root .. "/../simple-disenchant-tooltip"
 
 dofile(addonRoot .. "/Config.lua")
 dofile(addonRoot .. "/Pricing.lua")
@@ -27,12 +27,12 @@ local function assert_true(condition, message)
   end
 end
 
-local Pricing = Disenchanter.Pricing
+local Pricing = SimpleDisenchantTooltip.Pricing
 local G = Pricing.GOLD_ICON
 local S = Pricing.SILVER_ICON
 local C = Pricing.COPPER_ICON
 
-assert_eq(Disenchanter.Config.OUTCOME_PRICES, true, "OUTCOME_PRICES defaults true")
+assert_eq(SimpleDisenchantTooltip.Config.OUTCOME_PRICES, true, "OUTCOME_PRICES defaults true")
 
 -- FormatMoney: omit zero denominations.
 assert_eq(Pricing:FormatMoney(0), nil, "0 copper -> nil")
@@ -70,7 +70,7 @@ Auctionator = {
   API = {
     v1 = {
       GetAuctionPriceByItemID = function(caller, itemId)
-        assert_eq(caller, "Disenchanter", "callerID is Disenchanter")
+        assert_eq(caller, "Simple Disenchant Tooltip", "callerID is Simple Disenchant Tooltip")
         if itemId == 10940 then
           return 250
         end
@@ -89,7 +89,7 @@ assert_eq(money, "4 " .. S .. " 69 " .. C, "FormatOutcomeExpected dust")
 -- Most likely outcome value (not sum of all).
 local essence = { id = 10938, chance = 20, min = 1, max = 2 }
 Auctionator.API.v1.GetAuctionPriceByItemID = function(caller, itemId)
-  assert_eq(caller, "Disenchanter", "callerID is Disenchanter (likely)")
+  assert_eq(caller, "Simple Disenchant Tooltip", "callerID is Simple Disenchant Tooltip (likely)")
   if itemId == 10940 then
     return 250
   end

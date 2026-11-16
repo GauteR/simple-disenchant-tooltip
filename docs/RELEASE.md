@@ -1,4 +1,4 @@
-# Releasing Disenchanter
+# Releasing Simple Disenchant Tooltip
 
 Local packaging uses [BigWigsMods/packager](https://github.com/BigWigsMods/packager) (`release.sh` **v2.7.0**, Forever-aware).
 
@@ -24,7 +24,7 @@ Local packaging uses [BigWigsMods/packager](https://github.com/BigWigsMods/packa
    - `CF_API_TOKEN` — CurseForge
    - `WAGO_API_TOKEN` — Wago Addons  
    Both `scripts/release.ps1` and `scripts/release.sh` load `.release/.env` (and optionally repo-root `.env`) into the process environment before calling the packager. Do not commit either env file.
-3. When CurseForge / Wago projects exist, add these lines to [`disenchanter/disenchanter.toc`](../disenchanter/disenchanter.toc):
+3. When CurseForge / Wago projects exist, add these lines to [`simple-disenchant-tooltip/simple-disenchant-tooltip.toc`](../simple-disenchant-tooltip/simple-disenchant-tooltip.toc):
    - `## X-Curse-Project-ID: <id>`
    - `## X-Wago-ID: <id>`
 
@@ -101,7 +101,7 @@ Extra packager flags:
 
 ## What gets packaged
 
-[`.pkgmeta`](../.pkgmeta) uses `package-as: disenchanter` and `move-folders` so the nested [`disenchanter/`](../disenchanter/) addon becomes the zip root. `ignore` excludes docs, tests, scripts, and other repo metadata.
+[`.pkgmeta`](../.pkgmeta) uses `package-as: simple-disenchant-tooltip` and `move-folders` so the nested [`simple-disenchant-tooltip/`](../simple-disenchant-tooltip/) addon becomes the zip root. `ignore` excludes docs, tests, scripts, and other repo metadata.
 
 Artifacts land under `.release/` (gitignored except `release.sh` and `.env.example`).
 

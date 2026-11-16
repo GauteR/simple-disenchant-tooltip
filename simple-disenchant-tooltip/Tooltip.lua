@@ -1,8 +1,8 @@
 -- Append disenchant source / outcome lines to item tooltips.
-Disenchanter = Disenchanter or {}
-Disenchanter.Tooltip = Disenchanter.Tooltip or {}
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
+SimpleDisenchantTooltip.Tooltip = SimpleDisenchantTooltip.Tooltip or {}
 
-local Tooltip = Disenchanter.Tooltip
+local Tooltip = SimpleDisenchantTooltip.Tooltip
 
 -- Classic / comparison tooltips beyond GameTooltip + ItemRef.
 local CLASSIC_TOOLTIP_NAMES = {
@@ -15,22 +15,22 @@ local CLASSIC_TOOLTIP_NAMES = {
 
 local function QualityLabel(quality)
   if quality == "UNCOMMON" then
-    return Disenchanter:T("QUALITY_UNCOMMON")
+    return SimpleDisenchantTooltip:T("QUALITY_UNCOMMON")
   elseif quality == "RARE" then
-    return Disenchanter:T("QUALITY_RARE")
+    return SimpleDisenchantTooltip:T("QUALITY_RARE")
   elseif quality == "EPIC" then
-    return Disenchanter:T("QUALITY_EPIC")
+    return SimpleDisenchantTooltip:T("QUALITY_EPIC")
   end
   return quality
 end
 
 local function TypeLabel(itemType)
   if itemType == "ARMOR" then
-    return Disenchanter:T("TYPE_ARMOR")
+    return SimpleDisenchantTooltip:T("TYPE_ARMOR")
   elseif itemType == "WEAPON" then
-    return Disenchanter:T("TYPE_WEAPON")
+    return SimpleDisenchantTooltip:T("TYPE_WEAPON")
   elseif itemType == "ANY" then
-    return Disenchanter:T("TYPE_ANY")
+    return SimpleDisenchantTooltip:T("TYPE_ANY")
   end
   return itemType
 end
@@ -46,7 +46,7 @@ local function QtyText(minQty, maxQty)
 end
 
 local function FormatSourceLine(source)
-  return Disenchanter:T(
+  return SimpleDisenchantTooltip:T(
     "SOURCE_LINE_FMT",
     QualityLabel(source.quality),
     TypeLabel(source.itemType),
@@ -56,9 +56,9 @@ local function FormatSourceLine(source)
 end
 
 local function FormatOutcomeLine(outcome)
-  local name = Disenchanter.Materials:GetMaterialName(outcome.id) or ("#" .. tostring(outcome.id))
+  local name = SimpleDisenchantTooltip.Materials:GetMaterialName(outcome.id) or ("#" .. tostring(outcome.id))
   local qty = QtyText(outcome.min, outcome.max)
-  return Disenchanter:T("OUTCOME_LINE_FMT", name, qty)
+  return SimpleDisenchantTooltip:T("OUTCOME_LINE_FMT", name, qty)
 end
 
 -- Resolve item id from a tooltip frame (Retail-style data or classic GetItem).
@@ -68,8 +68,8 @@ local function ResolveItemId(tooltip, data)
   end
   if tooltip and tooltip.GetItem then
     local _, link = tooltip:GetItem()
-    if link and Disenchanter.Materials then
-      return Disenchanter.Materials:ParseItemId(link)
+    if link and SimpleDisenchantTooltip.Materials then
+      return SimpleDisenchantTooltip.Materials:ParseItemId(link)
     end
   end
   return nil
@@ -79,11 +79,11 @@ function Tooltip:AppendSources(tooltip, itemId)
   if not tooltip or not tooltip.AddLine then
     return false
   end
-  local Config = Disenchanter.Config
+  local Config = SimpleDisenchantTooltip.Config
   if not Config or Config.MATERIAL_SOURCES ~= true then
     return false
   end
-  local Materials = Disenchanter.Materials
+  local Materials = SimpleDisenchantTooltip.Materials
   if not Materials then
     return false
   end
@@ -106,11 +106,11 @@ function Tooltip:AppendOutcomes(tooltip, itemId)
   if not tooltip or not tooltip.AddLine then
     return false
   end
-  local Config = Disenchanter.Config
+  local Config = SimpleDisenchantTooltip.Config
   if not Config or Config.ITEM_OUTCOMES ~= true then
     return false
   end
-  local Materials = Disenchanter.Materials
+  local Materials = SimpleDisenchantTooltip.Materials
   if not Materials then
     return false
   end
@@ -127,18 +127,18 @@ function Tooltip:AppendOutcomes(tooltip, itemId)
   end
 
   -- Yellow label + white money: most likely outcome EV (not sum of all).
-  if Config.OUTCOME_PRICES == true and Disenchanter.Pricing and tooltip.AddDoubleLine then
-    local money = Disenchanter.Pricing:FormatLikelyExpected(outcomes)
+  if Config.OUTCOME_PRICES == true and SimpleDisenchantTooltip.Pricing and tooltip.AddDoubleLine then
+    local money = SimpleDisenchantTooltip.Pricing:FormatLikelyExpected(outcomes)
     if money then
       local yr, yg, yb = 1, 0.82, 0
-      tooltip:AddDoubleLine(Disenchanter:T("DISENCHANT_TOTAL"), money, yr, yg, yb, 1, 1, 1)
+      tooltip:AddDoubleLine(SimpleDisenchantTooltip:T("DISENCHANT_TOTAL"), money, yr, yg, yb, 1, 1, 1)
     end
   end
   return true
 end
 
 function Tooltip:AppendForItem(tooltip, itemId)
-  if not Disenchanter:IsEnabled() then
+  if not SimpleDisenchantTooltip:IsEnabled() then
     return
   end
   if not itemId then
@@ -158,7 +158,7 @@ local function OnItemTooltip(tooltip, data)
 end
 
 local function HookClassicTooltip(frame)
-  if not frame or frame._DisenchanterHooked then
+  if not frame or frame._SimpleDisenchantTooltipHooked then
     return
   end
   -- OnTooltipSetItem may be absent on some Forever builds; avoid hard error.
@@ -168,7 +168,7 @@ local function HookClassicTooltip(frame)
     end)
   end)
   if ok then
-    frame._DisenchanterHooked = true
+    frame._SimpleDisenchantTooltipHooked = true
   end
 end
 

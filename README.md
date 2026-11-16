@@ -7,7 +7,7 @@ Hover materials to see the top farm sources, or hover gear to see all expected d
 | | |
 | --- | --- |
 | Interface | `16001` (Forever / build line 1.60.x) |
-| Slash command | `/disenchanter` |
+| Slash command | `/sdt` |
 | Language | English (UI and docs) |
 | Optional dep | Auctionator (outcome prices) |
 | Version | From git tag via `@project-version@` in TOC (see [`docs/RELEASE.md`](docs/RELEASE.md)) |
@@ -23,13 +23,13 @@ Hover materials to see the top farm sources, or hover gear to see all expected d
 
 ## Install
 
-1. Copy the `disenchanter` folder into your Forever AddOns directory, for example:
+1. Copy the `simple-disenchant-tooltip` folder into your Forever AddOns directory, for example:
 
-   `World of Warcraft\_forever_\Interface\AddOns\disenchanter`
+   `World of Warcraft\_forever_\Interface\AddOns\simple-disenchant-tooltip`
 
 2. Restart the client, or log out and back in.
-3. Enable **Disenchanter** on the character addon list if it is disabled.
-4. Type `/disenchanter` in chat for status.
+3. Enable **Simple Disenchant Tooltip** on the character addon list if it is disabled.
+4. Type `/sdt` in chat for status.
 
 ## Usage
 
@@ -40,7 +40,7 @@ Hover materials to see the top farm sources, or hover gear to see all expected d
 
 ## Configuration
 
-Edit [`disenchanter/Config.lua`](disenchanter/Config.lua):
+Edit [`simple-disenchant-tooltip/Config.lua`](simple-disenchant-tooltip/Config.lua):
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
@@ -50,7 +50,7 @@ Edit [`disenchanter/Config.lua`](disenchanter/Config.lua):
 | `OUTCOME_PRICES` | `true` | Append Auctionator expected value when available. |
 | `CHANCE_GREEN` | `75` | Chance threshold for green line color. |
 | `CHANCE_YELLOW` | `35` | Chance threshold for yellow line color. |
-| `SLASH_COMMAND` | `"/disenchanter"` | Documented slash command. |
+| `SLASH_COMMAND` | `"/sdt"` | Documented slash command. |
 
 After changing config or data files, reload with `/reload`.
 
@@ -95,4 +95,4 @@ lua tests/test_pricing.lua
 
 ## License
 
-Personal / project use unless otherwise stated by the repository owner.
+[MIT](LICENSE) © 2026 GauteR

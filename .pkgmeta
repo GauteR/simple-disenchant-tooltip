@@ -1,8 +1,8 @@
-# Repo root is the VCS checkout; addon files live under disenchanter/.
-package-as: disenchanter
+# Repo root is the VCS checkout; addon files live under simple-disenchant-tooltip/.
+package-as: simple-disenchant-tooltip
 
 move-folders:
-  disenchanter/disenchanter: disenchanter
+  simple-disenchant-tooltip/simple-disenchant-tooltip: simple-disenchant-tooltip
 
 ignore:
   - docs

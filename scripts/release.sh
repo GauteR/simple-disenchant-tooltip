@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run unit tests, then package Disenchanter with BigWigs .release/release.sh (optional upload).
+# Run unit tests, then package Simple Disenchant Tooltip with BigWigs .release/release.sh (optional upload).
 #
 # Usage:
 #   ./scripts/release.sh --dry-run
@@ -98,9 +98,9 @@ fi
 echo "==> Packaging with release.sh ${PACKAGER_ARGS[*]}"
 bash "$RELEASE_SH" ${PACKAGER_ARGS[@]+"${PACKAGER_ARGS[@]}"}
 
-PACKAGE_DIR="$REPO_ROOT/.release/disenchanter"
-if [[ ! -f "$PACKAGE_DIR/disenchanter.toc" ]]; then
-  echo "Expected packaged TOC at .release/disenchanter/disenchanter.toc" >&2
+PACKAGE_DIR="$REPO_ROOT/.release/simple-disenchant-tooltip"
+if [[ ! -f "$PACKAGE_DIR/simple-disenchant-tooltip.toc" ]]; then
+  echo "Expected packaged TOC at .release/simple-disenchant-tooltip/simple-disenchant-tooltip.toc" >&2
   exit 1
 fi
 for name in docs tests scripts; do
@@ -144,9 +144,9 @@ PY
 }
 
 if [[ $USE_TAR_ZIP -eq 1 ]]; then
-  version="$(awk -F': ' '/^## Version:/{print $2; exit}' "$PACKAGE_DIR/disenchanter.toc" | tr -d '\r')"
+  version="$(awk -F': ' '/^## Version:/{print $2; exit}' "$PACKAGE_DIR/simple-disenchant-tooltip.toc" | tr -d '\r')"
   version="${version:-unknown}"
-  zip_name="disenchanter-${version}-forever.zip"
+  zip_name="simple-disenchant-tooltip-${version}-forever.zip"
   zip_path="$REPO_ROOT/.release/$zip_name"
   echo "==> Creating $zip_name"
   make_zip "$PACKAGE_DIR" "$zip_path"

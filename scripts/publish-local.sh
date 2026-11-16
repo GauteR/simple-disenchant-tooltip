@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copy the disenchanter addon into a local Forever AddOns folder for in-game testing.
+# Copy the simple-disenchant-tooltip addon into a local Forever AddOns folder for in-game testing.
 #
 # Usage:
 #   ./scripts/publish-local.sh
@@ -33,7 +33,7 @@ done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SOURCE="$REPO_ROOT/disenchanter"
+SOURCE="$REPO_ROOT/simple-disenchant-tooltip"
 
 # Read Config.VERSION for local TOC substitution (packager uses @project-version@ at release).
 get_config_version() {
@@ -69,7 +69,7 @@ set_published_toc_version() {
 
 normalize_addons_dir() {
   local p="${1%/}"
-  if [[ "$(basename "$p")" == "disenchanter" ]]; then
+  if [[ "$(basename "$p")" == "simple-disenchant-tooltip" ]]; then
     dirname "$p"
   else
     printf '%s\n' "$p"
@@ -83,8 +83,8 @@ resolve_forever_addons_dir() {
     return 0
   fi
 
-  if [[ -n "${DISENCHANTER_FOREVER_ADDONS:-}" ]]; then
-    normalize_addons_dir "$DISENCHANTER_FOREVER_ADDONS"
+  if [[ -n "${SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS:-}" ]]; then
+    normalize_addons_dir "$SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS"
     return 0
   fi
 
@@ -123,8 +123,8 @@ resolve_forever_addons_dir() {
   return 1
 }
 
-if [[ ! -f "$SOURCE/disenchanter.toc" ]]; then
-  echo "Missing addon source at $SOURCE (expected disenchanter.toc)." >&2
+if [[ ! -f "$SOURCE/simple-disenchant-tooltip.toc" ]]; then
+  echo "Missing addon source at $SOURCE (expected simple-disenchant-tooltip.toc)." >&2
   exit 1
 fi
 
@@ -140,7 +140,7 @@ fi
 if ! ADDONS_DIR="$(resolve_forever_addons_dir "$DESTINATION")"; then
   cat >&2 <<'EOF'
 Could not find Forever AddOns folder.
-Pass --destination, set DISENCHANTER_FOREVER_ADDONS, or create scripts/forever-addons.path
+Pass --destination, set SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS, or create scripts/forever-addons.path
 with one line, e.g.:
   D:\World of Warcraft\_forever_\Interface\AddOns
 EOF
@@ -152,7 +152,7 @@ if [[ ! -d "$ADDONS_DIR" ]]; then
   exit 1
 fi
 
-TARGET="$ADDONS_DIR/disenchanter"
+TARGET="$ADDONS_DIR/simple-disenchant-tooltip"
 echo "==> Publishing $SOURCE"
 echo "    -> $TARGET"
 
@@ -168,14 +168,14 @@ fi
 
 rm -rf "$TARGET"
 mkdir -p "$TARGET"
-# Copy contents (not the disenchanter directory itself as an extra nesting level).
+# Copy contents (not the simple-disenchant-tooltip directory itself as an extra nesting level).
 cp -a "$SOURCE"/. "$TARGET"/
 
-if [[ ! -f "$TARGET/disenchanter.toc" ]]; then
-  echo "Publish failed: missing $TARGET/disenchanter.toc" >&2
+if [[ ! -f "$TARGET/simple-disenchant-tooltip.toc" ]]; then
+  echo "Publish failed: missing $TARGET/simple-disenchant-tooltip.toc" >&2
   exit 1
 fi
 
-set_published_toc_version "$TARGET/disenchanter.toc" "$VERSION"
+set_published_toc_version "$TARGET/simple-disenchant-tooltip.toc" "$VERSION"
 
 echo "==> Done. Reload the Forever client (/reload) or restart to load changes."

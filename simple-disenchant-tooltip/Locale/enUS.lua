@@ -1,13 +1,13 @@
 -- English (enUS) UI strings.
-Disenchanter = Disenchanter or {}
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
 local L = {}
-Disenchanter.L = L
+SimpleDisenchantTooltip.L = L
 
-L.ADDON_NAME = "Disenchanter"
-L.CHAT_PREFIX = "|cff33ff99Disenchanter|r: "
+L.ADDON_NAME = "Simple Disenchant Tooltip"
+L.CHAT_PREFIX = "|cff33ff99Simple Disenchant Tooltip|r: "
 
 L.CHAT_DISABLED = "Addon is disabled."
-L.CHAT_LOADED = "Loaded. /disenchanter for status."
+L.CHAT_LOADED = "Loaded. /sdt for status."
 L.CHAT_STATUS_ON = "Tooltips enabled."
 L.CHAT_STATUS_OFF = "Addon is disabled in Config."
 
@@ -26,7 +26,7 @@ L.TYPE_WEAPON = "Weapons"
 L.TYPE_ANY = "Armor or Weapons"
 
 -- Resolve a locale key; optional format args.
-function Disenchanter:T(key, ...)
+function SimpleDisenchantTooltip:T(key, ...)
   local text = (self.L and self.L[key]) or key
   if select("#", ...) > 0 then
     return string.format(text, ...)
