@@ -46,6 +46,7 @@ Edit [`simple-disenchant-tooltip/Config.lua`](simple-disenchant-tooltip/Config.l
 | `ENABLED` | `true` | Master flag. `false` disables slash, tooltips, and Options actions. |
 | `MATERIAL_SOURCES` | `true` | Material hover: top two DE sources. |
 | `ITEM_OUTCOMES` | `true` | Gear hover: all expected DE outcomes. |
+| `OUTCOME_LEVEL_FALLBACK` | `true` | Clamp out-of-range item level to nearest Vanilla DE band (Forever low/high gear). |
 | `OUTCOME_PRICES` | `true` | Append Auctionator expected value when available. |
 | `CHANCE_GREEN` | `75` | Chance threshold for green line color. |
 | `CHANCE_YELLOW` | `35` | Chance threshold for yellow line color. |

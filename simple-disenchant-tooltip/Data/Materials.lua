@@ -118,7 +118,9 @@ function Materials:GetOutcomesForItem(itemId)
   if not Tables then
     return nil
   end
-  return Tables:GetOutcomes(qualityKey, typeKey, itemLevel), qualityKey, typeKey, itemLevel
+  local Config = SimpleDisenchantTooltip.Config
+  local clamp = Config and Config.OUTCOME_LEVEL_FALLBACK == true
+  return Tables:GetOutcomes(qualityKey, typeKey, itemLevel, clamp), qualityKey, typeKey, itemLevel
 end
 
 -- Pure-Lua outcome lookup (tests / callers with explicit stats).
@@ -127,7 +129,9 @@ function Materials:GetOutcomesForStats(qualityKey, typeKey, itemLevel)
   if not Tables then
     return nil
   end
-  return Tables:GetOutcomes(qualityKey, typeKey, itemLevel)
+  local Config = SimpleDisenchantTooltip.Config
+  local clamp = Config and Config.OUTCOME_LEVEL_FALLBACK == true
+  return Tables:GetOutcomes(qualityKey, typeKey, itemLevel, clamp)
 end
 
 -- RGB for tooltip lines: >= greenThresh green, >= yellowThresh yellow, else gray.

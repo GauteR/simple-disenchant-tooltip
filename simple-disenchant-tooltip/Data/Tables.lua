@@ -99,7 +99,7 @@ Tables.FORWARD = {
 }
 
 local function FindRange(ranges, itemLevel)
-  if type(itemLevel) ~= "number" or not ranges then
+  if type(itemLevel) ~= "number" or not ranges or #ranges == 0 then
     return nil
   end
   for i = 1, #ranges do
@@ -111,14 +111,54 @@ local function FindRange(ranges, itemLevel)
   return nil
 end
 
+-- Nearest band when ilvl is below, above, or in a gap between Vanilla ranges.
+local function FindNearestRange(ranges, itemLevel)
+  if type(itemLevel) ~= "number" or not ranges or #ranges == 0 then
+    return nil
+  end
+  local exact = FindRange(ranges, itemLevel)
+  if exact then
+    return exact
+  end
+  if itemLevel < ranges[1].minLevel then
+    return ranges[1]
+  end
+  if itemLevel > ranges[#ranges].maxLevel then
+    return ranges[#ranges]
+  end
+  -- Gap between bands: pick the closer edge (ties prefer lower band).
+  local best = ranges[1]
+  local bestDist = math.abs(itemLevel - best.maxLevel)
+  for i = 1, #ranges do
+    local row = ranges[i]
+    local distBelow = math.abs(itemLevel - row.minLevel)
+    local distAbove = math.abs(itemLevel - row.maxLevel)
+    local dist = distBelow
+    if distAbove < dist then
+      dist = distAbove
+    end
+    if dist < bestDist then
+      best = row
+      bestDist = dist
+    end
+  end
+  return best
+end
+
 -- quality: UNCOMMON|RARE|EPIC, itemType: ARMOR|WEAPON, itemLevel: number
-function Tables:GetOutcomes(quality, itemType, itemLevel)
+-- clampToNearest: use nearest band when ilvl is outside Vanilla tables (Forever).
+function Tables:GetOutcomes(quality, itemType, itemLevel, clampToNearest)
   local byQuality = self.FORWARD[quality]
   if not byQuality then
     return nil
   end
   local ranges = byQuality[itemType] or byQuality.ANY
-  local row = FindRange(ranges, itemLevel)
+  local row
+  if clampToNearest then
+    row = FindNearestRange(ranges, itemLevel)
+  else
+    row = FindRange(ranges, itemLevel)
+  end
   if not row then
     return nil
   end
