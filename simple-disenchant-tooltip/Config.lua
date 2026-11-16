@@ -10,8 +10,10 @@ SimpleDisenchantTooltip.Config = {
   ITEM_OUTCOMES = true,
   -- When ilvl is outside Vanilla DE bands, use nearest band (Forever low/high gear).
   OUTCOME_LEVEL_FALLBACK = true,
-  -- Append Disenchant line with most-likely outcome AH value (Auctionator).
+  -- Append Disenchant line with most-likely outcome AH value (TSM then Auctionator).
   OUTCOME_PRICES = true,
+  -- TSM custom price source for material unit prices (soft-dep).
+  TSM_PRICE_SOURCE = "DBMarket",
   -- Tooltip line colors by drop chance: green / yellow / gray.
   CHANCE_GREEN = 75,
   CHANCE_YELLOW = 35,

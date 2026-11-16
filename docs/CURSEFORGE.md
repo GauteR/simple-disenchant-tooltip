@@ -13,14 +13,14 @@
 
 Disenchant tooltip helper for **World of Warcraft: Forever**.
 
-See where Vanilla enchanting materials come from, and what gear is expected to disenchant into — with optional Auctionator pricing.
+See where Vanilla enchanting materials come from, and what gear is expected to disenchant into — with optional TradeSkillMaster or Auctionator pricing.
 
 ## Features
 
 - Material hover: top two farm sources (chance-colored)
 - Gear hover: all expected disenchant outcomes
 - Out-of-range item levels use the nearest Vanilla disenchant band (Forever low/high gear)
-- Optional Auctionator expected value and Disenchant total
+- Optional TradeSkillMaster (`DBMarket`) then Auctionator expected value and Disenchant total
 - Slash `/sdt` for status
 - Feature flags to turn tooltip lines on or off
 
@@ -39,7 +39,7 @@ See where Vanilla enchanting materials come from, and what gear is expected to d
 
 1. Log in and hover a Strange Dust / Essence / Shard / Crystal, or disenchantable gear.
 2. Read the colored tooltip lines (green = common, yellow = uncommon, gray = rare drops).
-3. With Auctionator installed, priced outcomes show expected AH value when the DB has prices.
+3. With TradeSkillMaster or Auctionator installed, priced outcomes show expected AH value when the DB has prices (TSM preferred).
 
 ## Support / source
 

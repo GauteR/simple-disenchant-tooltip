@@ -1,4 +1,4 @@
--- Auctionator soft-dep: market prices and expected DE copper values.
+-- Soft-deps: TSM (DBMarket) then Auctionator for material unit prices / DE EV.
 SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
 SimpleDisenchantTooltip.Pricing = SimpleDisenchantTooltip.Pricing or {}
 
@@ -77,6 +77,32 @@ function Pricing:ExpectedCopper(outcome, unitPrice)
   return (chance / 100) * avgQty * unitPrice
 end
 
+-- Soft dependency: TSM DBMarket (or Config.TSM_PRICE_SOURCE) in copper, or nil.
+function Pricing:GetTSMPrice(itemId)
+  if type(itemId) ~= "number" then
+    return nil
+  end
+  local api = TSM_API
+  if type(api) ~= "table" or type(api.GetCustomPriceValue) ~= "function" then
+    return nil
+  end
+
+  local itemString = "i:" .. tostring(itemId)
+  if type(api.ToItemString) == "function" then
+    local okLink, converted = pcall(api.ToItemString, "item:" .. tostring(itemId))
+    if okLink and type(converted) == "string" and converted ~= "" then
+      itemString = converted
+    end
+  end
+
+  local source = (SimpleDisenchantTooltip.Config and SimpleDisenchantTooltip.Config.TSM_PRICE_SOURCE) or "DBMarket"
+  local ok, price = pcall(api.GetCustomPriceValue, source, itemString)
+  if not ok or type(price) ~= "number" or price <= 0 then
+    return nil
+  end
+  return price
+end
+
 -- Soft dependency: last scanned Auctionator AH price in copper, or nil.
 function Pricing:GetAuctionPrice(itemId)
   if type(itemId) ~= "number" then
@@ -95,12 +121,17 @@ function Pricing:GetAuctionPrice(itemId)
   return price
 end
 
+-- Unit price: TSM first, then Auctionator.
+function Pricing:GetUnitPrice(itemId)
+  return self:GetTSMPrice(itemId) or self:GetAuctionPrice(itemId)
+end
+
 -- Expected money string for an outcome line, or nil when price/API missing.
 function Pricing:FormatOutcomeExpected(outcome)
   if not outcome then
     return nil
   end
-  local unitPrice = self:GetAuctionPrice(outcome.id)
+  local unitPrice = self:GetUnitPrice(outcome.id)
   local expected = self:ExpectedCopper(outcome, unitPrice)
   if not expected then
     return nil
@@ -132,7 +163,7 @@ function Pricing:LikelyExpectedCopper(outcomes)
   if not outcome then
     return nil
   end
-  return self:ExpectedCopper(outcome, self:GetAuctionPrice(outcome.id))
+  return self:ExpectedCopper(outcome, self:GetUnitPrice(outcome.id))
 end
 
 -- Money string for the most likely outcome (Vendor/Auction Disenchant line).

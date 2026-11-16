@@ -39,7 +39,8 @@
       "Settings",
       "C_AddOns",
       "GetAddOnMetadata",
-      "Auctionator"
+      "Auctionator",
+      "TSM_API"
     ]
   },
   "workspace": {
