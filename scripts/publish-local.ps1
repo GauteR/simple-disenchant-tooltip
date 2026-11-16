@@ -8,7 +8,7 @@
   simple-disenchant-tooltip folder itself. Overrides env SIMPLE_DISENCHANT_TOOLTIP_FOREVER_ADDONS.
 
 .PARAMETER SkipTests
-  Skip lua tests/test_materials.lua.
+  Skip lua unit tests.
 
 .PARAMETER WhatIf
   Show what would be copied without writing files.
@@ -117,9 +117,11 @@ if (-not $SkipTests) {
     Write-Error "lua not found on PATH. Install a Lua interpreter or pass -SkipTests."
   }
   Write-Host "==> Running tests"
-  & lua (Join-Path $RepoRoot "tests\test_materials.lua")
-  if ($LASTEXITCODE -ne 0) {
-    Write-Error "Tests failed (exit $LASTEXITCODE)."
+  foreach ($test in @("test_materials.lua", "test_pricing.lua", "test_tooltip.lua")) {
+    & lua (Join-Path $RepoRoot "tests\$test")
+    if ($LASTEXITCODE -ne 0) {
+      Write-Error "Tests failed ($test exit $LASTEXITCODE)."
+    }
   }
 }
 

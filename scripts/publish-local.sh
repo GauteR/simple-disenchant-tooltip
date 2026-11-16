@@ -135,6 +135,8 @@ if [[ $SKIP_TESTS -eq 0 ]]; then
   fi
   echo "==> Running tests"
   lua "$REPO_ROOT/tests/test_materials.lua"
+  lua "$REPO_ROOT/tests/test_pricing.lua"
+  lua "$REPO_ROOT/tests/test_tooltip.lua"
 fi
 
 if ! ADDONS_DIR="$(resolve_forever_addons_dir "$DESTINATION")"; then

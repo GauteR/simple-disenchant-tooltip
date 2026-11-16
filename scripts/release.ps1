@@ -7,7 +7,7 @@
   Skip CurseForge/Wago/GitHub upload (passes -d to release.sh).
 
 .PARAMETER SkipTests
-  Skip lua tests/test_materials.lua.
+  Skip lua unit tests.
 
 .PARAMETER ExtraArgs
   Extra arguments forwarded to release.sh.
@@ -167,9 +167,11 @@ if (-not $SkipTests) {
     Write-Error "lua not found on PATH. Install a Lua interpreter or pass -SkipTests."
   }
   Write-Host "==> Running tests"
-  & lua "tests/test_materials.lua"
-  if ($LASTEXITCODE -ne 0) {
-    Write-Error "Tests failed (exit $LASTEXITCODE)."
+  foreach ($test in @("test_materials.lua", "test_pricing.lua", "test_tooltip.lua")) {
+    & lua "tests/$test"
+    if ($LASTEXITCODE -ne 0) {
+      Write-Error "Tests failed ($test exit $LASTEXITCODE)."
+    }
   }
 }
 
