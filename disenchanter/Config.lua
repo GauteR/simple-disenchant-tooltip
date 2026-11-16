@@ -15,6 +15,6 @@ Disenchanter.Config = {
   CHANCE_YELLOW = 35,
   ADDON_NAME = "Disenchanter",
   -- Shown in Options when TOC ## Version: @project-version@ is not packaged yet.
-  VERSION = "0.1.0",
+  VERSION = "1.0.0",
   SLASH_COMMAND = "/disenchanter",
 }
