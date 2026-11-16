@@ -13,8 +13,9 @@ Pricing.GOLD_ICON = GOLD_ICON
 Pricing.SILVER_ICON = SILVER_ICON
 Pricing.COPPER_ICON = COPPER_ICON
 
--- Format copper as "Ng NNs NNc" with icons; omit denominations that are 0.
--- Silver and copper always use a leading zero (two digits) when shown.
+-- Format copper as "Ng Ns Nc" with icons; omit denominations that are 0.
+-- Only denominations below the highest shown unit get a leading zero (two digits).
+-- Examples: 1c; 1s 01c; 1g 01s 01c.
 function Pricing:FormatMoney(copper)
   if type(copper) ~= "number" or copper ~= copper then
     return nil
@@ -27,16 +28,21 @@ function Pricing:FormatMoney(copper)
   local gold = math.floor(copper / 10000)
   local silver = math.floor((copper % 10000) / 100)
   local copperPart = copper % 100
+  local showGold = gold > 0
+  local showSilver = silver > 0
+  local showCopper = copperPart > 0
 
   local parts = {}
-  if gold > 0 then
+  if showGold then
     parts[#parts + 1] = tostring(gold) .. " " .. GOLD_ICON
   end
-  if silver > 0 then
-    parts[#parts + 1] = string.format("%02d", silver) .. " " .. SILVER_ICON
+  if showSilver then
+    local silverText = showGold and string.format("%02d", silver) or tostring(silver)
+    parts[#parts + 1] = silverText .. " " .. SILVER_ICON
   end
-  if copperPart > 0 then
-    parts[#parts + 1] = string.format("%02d", copperPart) .. " " .. COPPER_ICON
+  if showCopper then
+    local copperText = (showGold or showSilver) and string.format("%02d", copperPart) or tostring(copperPart)
+    parts[#parts + 1] = copperText .. " " .. COPPER_ICON
   end
   if #parts == 0 then
     return nil
