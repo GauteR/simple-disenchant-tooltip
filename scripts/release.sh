@@ -104,6 +104,8 @@ if [[ $SKIP_TESTS -eq 0 ]]; then
   fi
   echo "==> Running tests"
   lua tests/test_materials.lua
+  lua tests/test_pricing.lua
+  lua tests/test_tooltip.lua
 fi
 
 RELEASE_SH="$REPO_ROOT/.release/release.sh"

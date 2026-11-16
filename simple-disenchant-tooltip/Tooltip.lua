@@ -13,6 +13,8 @@ local CLASSIC_TOOLTIP_NAMES = {
   "EmbeddedItemTooltip",
 }
 
+local APPENDED_FLAG = "_SimpleDisenchantTooltipAppended"
+
 local function QualityLabel(quality)
   if quality == "UNCOMMON" then
     return SimpleDisenchantTooltip:T("QUALITY_UNCOMMON")
@@ -73,6 +75,24 @@ local function ResolveItemId(tooltip, data)
     end
   end
   return nil
+end
+
+-- Reset after Auctionator / client rebuild so the next show can append once.
+function Tooltip:ClearAppendState(tooltip)
+  if tooltip then
+    tooltip[APPENDED_FLAG] = nil
+  end
+end
+
+-- True when this frame already got DE lines for the same itemId this show.
+local function HasAppended(tooltip, itemId)
+  return tooltip and itemId and tooltip[APPENDED_FLAG] == itemId
+end
+
+local function MarkAppended(tooltip, itemId)
+  if tooltip and itemId then
+    tooltip[APPENDED_FLAG] = itemId
+  end
 end
 
 function Tooltip:AppendSources(tooltip, itemId)
@@ -144,9 +164,17 @@ function Tooltip:AppendForItem(tooltip, itemId)
   if not itemId then
     return
   end
+  -- Skip re-entry for the same item this show (e.g. Auctionator price refresh).
+  if HasAppended(tooltip, itemId) then
+    return
+  end
   -- Materials: top two sources; gear: all expected DE results.
-  if not self:AppendSources(tooltip, itemId) then
-    self:AppendOutcomes(tooltip, itemId)
+  local appended = self:AppendSources(tooltip, itemId)
+  if not appended then
+    appended = self:AppendOutcomes(tooltip, itemId)
+  end
+  if appended then
+    MarkAppended(tooltip, itemId)
   end
 end
 
@@ -172,6 +200,25 @@ local function HookClassicTooltip(frame)
   end
 end
 
+-- Allow a fresh append after the tooltip is cleared or hidden.
+local function HookTooltipLifecycle(frame)
+  if not frame or frame._SimpleDisenchantTooltipClearHooked then
+    return
+  end
+  local function clear()
+    Tooltip:ClearAppendState(frame)
+  end
+  local clearedOk = pcall(function()
+    frame:HookScript("OnTooltipCleared", clear)
+  end)
+  local hideOk = pcall(function()
+    frame:HookScript("OnHide", clear)
+  end)
+  if clearedOk or hideOk then
+    frame._SimpleDisenchantTooltipClearHooked = true
+  end
+end
+
 function Tooltip:Initialize()
   if self.initialized then
     return
@@ -187,6 +234,14 @@ function Tooltip:Initialize()
       if frame then
         HookClassicTooltip(frame)
       end
+    end
+  end
+
+  -- Clear hooks on both paths so rebuilds can append exactly once again.
+  for i = 1, #CLASSIC_TOOLTIP_NAMES do
+    local frame = _G[CLASSIC_TOOLTIP_NAMES[i]]
+    if frame then
+      HookTooltipLifecycle(frame)
     end
   end
 
