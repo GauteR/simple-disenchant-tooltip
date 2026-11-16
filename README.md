@@ -91,6 +91,7 @@ See [`docs/RELEASE.md`](docs/RELEASE.md).
 ```bash
 lua tests/test_materials.lua
 lua tests/test_pricing.lua
+lua tests/test_tooltip.lua
 ```
 
 ## License

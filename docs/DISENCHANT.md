@@ -22,6 +22,7 @@ Linjefarge etter drop-sjanse: **grønn** ≥ `CHANCE_GREEN` (75), **gul** ≥ `C
 - Master-flag: `Config.ENABLED`
 - Shield / off-hand telles som **WEAPON** i DE-tabellene (essence-primær)
 - Tooltip-hook: `TooltipDataProcessor` når tilgjengelig; ellers `OnTooltipSetItem` på GameTooltip, ItemRefTooltip, ShoppingTooltip1/2, EmbeddedItemTooltip
+- Dedupe: `_SimpleDisenchantTooltipAppended` lagrer sist appendede `itemId` per tooltip-frame; `AppendForItem` hopper over re-entry for samme item (f.eks. Auctionator Vendor/Auction-refresh). Nullstilles på `OnTooltipCleared` / `OnHide` via `Tooltip:ClearAppendState`
 - `ENABLED = false`: chat-melding ved login; ingen slash/tooltip/Options
 
 ## Referanser
