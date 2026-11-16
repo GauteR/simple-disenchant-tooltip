@@ -1,11 +1,12 @@
 ## Interface: 16001
 ## Title: Simple Disenchant Tooltip
-## Notes: Shows Vanilla Classic disenchant sources and expected outcomes on item tooltips.
-## Author: Neema
+## Notes: Shows disenchant sources and expected outcomes on item tooltips.
+## Author: GauteR
 ## Version: @project-version@
 ## DefaultState: enabled
 ## OptionalDeps: Auctionator
 ## IconTexture: Interface\Icons\INV_Enchant_DustStrange
+## X-Curse-Project-ID: 1809310
 
 Config.lua
 Locale/enUS.lua
