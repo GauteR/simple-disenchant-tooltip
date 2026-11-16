@@ -34,22 +34,30 @@ local C = Pricing.COPPER_ICON
 
 assert_eq(SimpleDisenchantTooltip.Config.OUTCOME_PRICES, true, "OUTCOME_PRICES defaults true")
 
--- FormatMoney: omit zero denominations; pad silver/copper to two digits.
+-- FormatMoney: omit zero denominations; pad only below highest shown unit.
 assert_eq(Pricing:FormatMoney(0), nil, "0 copper -> nil")
 assert_eq(Pricing:FormatMoney(-1), nil, "negative -> nil")
 assert_eq(Pricing:FormatMoney(nil), nil, "nil -> nil")
-assert_eq(Pricing:FormatMoney(3), "03 " .. C, "3c only (padded)")
-assert_eq(Pricing:FormatMoney(200), "02 " .. S, "2s only (0c omitted, padded)")
+assert_eq(Pricing:FormatMoney(1), "1 " .. C, "1c only (no pad)")
+assert_eq(Pricing:FormatMoney(3), "3 " .. C, "3c only (no pad)")
+assert_eq(Pricing:FormatMoney(200), "2 " .. S, "2s only (0c omitted, no pad)")
+assert_eq(Pricing:FormatMoney(101), "1 " .. S .. " 01 " .. C, "1s 01c")
 assert_eq(Pricing:FormatMoney(10000), "1 " .. G, "1g only")
+assert_eq(
+  Pricing:FormatMoney(10101),
+  "1 " .. G .. " 01 " .. S .. " 01 " .. C,
+  "1g 01s 01c"
+)
 assert_eq(
   Pricing:FormatMoney(10203),
   "1 " .. G .. " 02 " .. S .. " 03 " .. C,
   "1g 02s 03c"
 )
 assert_eq(Pricing:FormatMoney(10003), "1 " .. G .. " 03 " .. C, "1g 03c (0s omitted)")
-assert_eq(Pricing:FormatMoney(1.4), "01 " .. C, "round down-ish 1.4 -> 01c")
-assert_eq(Pricing:FormatMoney(1.5), "02 " .. C, "round 1.5 -> 02c")
-assert_eq(Pricing:FormatMoney(69), "69 " .. C, "69c no leading zero needed")
+assert_eq(Pricing:FormatMoney(10200), "1 " .. G .. " 02 " .. S, "1g 02s (0c omitted)")
+assert_eq(Pricing:FormatMoney(1.4), "1 " .. C, "round down-ish 1.4 -> 1c")
+assert_eq(Pricing:FormatMoney(1.5), "2 " .. C, "round 1.5 -> 2c")
+assert_eq(Pricing:FormatMoney(69), "69 " .. C, "69c alone unpadded")
 assert_eq(Pricing:FormatMoney(1069), "10 " .. S .. " 69 " .. C, "10s 69c")
 
 -- ExpectedCopper: chance * avgQty * unitPrice.
@@ -86,7 +94,7 @@ assert_eq(Pricing:GetAuctionPrice(99999), nil, "unknown item nil")
 
 local money = Pricing:FormatOutcomeExpected(dust)
 -- expected = 0.75 * 2.5 * 250 = 468.75 -> 469c = 4s 69c
-assert_eq(money, "04 " .. S .. " 69 " .. C, "FormatOutcomeExpected dust")
+assert_eq(money, "4 " .. S .. " 69 " .. C, "FormatOutcomeExpected dust")
 
 -- Most likely outcome value (not sum of all).
 local essence = { id = 10938, chance = 20, min = 1, max = 2 }
@@ -107,7 +115,7 @@ assert_eq(Pricing:LikelyExpectedCopper({ shard }), nil, "unpriced most-likely ->
 assert_eq(Pricing:LikelyExpectedCopper(nil), nil, "nil outcomes -> nil")
 assert_eq(
   Pricing:FormatLikelyExpected({ essence, dust }),
-  "04 " .. S .. " 69 " .. C,
+  "4 " .. S .. " 69 " .. C,
   "FormatLikelyExpected uses dust not sum"
 )
 

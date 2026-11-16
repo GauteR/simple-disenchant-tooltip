@@ -5,16 +5,21 @@ SimpleDisenchantTooltip.Pricing = SimpleDisenchantTooltip.Pricing or {}
 local Pricing = SimpleDisenchantTooltip.Pricing
 
 -- Classic MoneyFrame coin textures (texture escape sequences).
-local GOLD_ICON = "|TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0|t"
-local SILVER_ICON = "|TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0|t"
-local COPPER_ICON = "|TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0|t"
+-- Size/offset match Auctionator padded money so icon↔digit spacing stays readable.
+local GOLD_ICON = "|TInterface\\MoneyFrame\\UI-GoldIcon:12:12:0:0|t"
+local SILVER_ICON = "|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:0:0|t"
+local COPPER_ICON = "|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:0:0|t"
+local LEFT_PAD = " "
+local RIGHT_PAD = " "
 
 Pricing.GOLD_ICON = GOLD_ICON
 Pricing.SILVER_ICON = SILVER_ICON
 Pricing.COPPER_ICON = COPPER_ICON
 
--- Format copper as "Ng NNs NNc" with icons; omit denominations that are 0.
--- Silver and copper always use a leading zero (two digits) when shown.
+-- Format copper as "Ng Ns Nc" with icons; omit denominations that are 0.
+-- Only denominations below the highest shown unit get a leading zero (two digits).
+-- Spacing: "N|icon| N|icon|" (space after icon before next amount), like Auctionator.
+-- Examples: 1c; 1s 01c; 1g 01s 01c.
 function Pricing:FormatMoney(copper)
   if type(copper) ~= "number" or copper ~= copper then
     return nil
@@ -27,21 +32,28 @@ function Pricing:FormatMoney(copper)
   local gold = math.floor(copper / 10000)
   local silver = math.floor((copper % 10000) / 100)
   local copperPart = copper % 100
+  local showGold = gold > 0
+  local showSilver = silver > 0
+  local showCopper = copperPart > 0
 
   local parts = {}
-  if gold > 0 then
-    parts[#parts + 1] = tostring(gold) .. " " .. GOLD_ICON
+  if showGold then
+    local trail = (showSilver or showCopper) and RIGHT_PAD or ""
+    parts[#parts + 1] = tostring(gold) .. LEFT_PAD .. GOLD_ICON .. trail
   end
-  if silver > 0 then
-    parts[#parts + 1] = string.format("%02d", silver) .. " " .. SILVER_ICON
+  if showSilver then
+    local silverText = showGold and string.format("%02d", silver) or tostring(silver)
+    local trail = showCopper and RIGHT_PAD or ""
+    parts[#parts + 1] = silverText .. LEFT_PAD .. SILVER_ICON .. trail
   end
-  if copperPart > 0 then
-    parts[#parts + 1] = string.format("%02d", copperPart) .. " " .. COPPER_ICON
+  if showCopper then
+    local copperText = (showGold or showSilver) and string.format("%02d", copperPart) or tostring(copperPart)
+    parts[#parts + 1] = copperText .. LEFT_PAD .. COPPER_ICON
   end
   if #parts == 0 then
     return nil
   end
-  return table.concat(parts, " ")
+  return table.concat(parts, "")
 end
 
 -- Expected copper for one outcome: (chance/100) * avgQty * unitPrice.

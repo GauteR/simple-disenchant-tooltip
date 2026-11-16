@@ -17,6 +17,6 @@ SimpleDisenchantTooltip.Config = {
   CHANCE_YELLOW = 35,
   ADDON_NAME = "Simple Disenchant Tooltip",
   -- Shown in Options when TOC ## Version: @project-version@ is not packaged yet.
-  VERSION = "1.1.2",
+  VERSION = "1.1.3",
   SLASH_COMMAND = "/sdt",
 }
