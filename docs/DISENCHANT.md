@@ -17,7 +17,7 @@ Linjefarge etter drop-sjanse: **grønn** ≥ `CHANCE_GREEN` (75), **gul** ≥ `C
 
 - Material-hover: `Config.MATERIAL_SOURCES` (topp 2 sammenslåtte kilder)
 - Gear-hover: `Config.ITEM_OUTCOMES` (alle outcomes; krever `GetItemInfo` / `C_Item.GetItemInfo`)
-- Gear-priser: `Config.OUTCOME_PRICES` — forventet AH-verdi per outcome-linje via Auctionator (`OptionalDeps`). Formel: `(sjanse/100) × snittantall × enhetspris`. Format: `Strange Dust 1–2, ~1g 2s 3c` (MoneyFrame-ikoner; null-denominationer skjules). Under outcomes: `AddDoubleLine` **Disenchant** (gul) med summert forventet verdi høyrestilt (uten `~`); totalen summerer bare outcomes som har kjent AH-pris. Sjansetfarge er embedded `|cff` på navn/antall slik at mynt-ikonene ikke tintes. Mangler Auctionator/pris på alle → vanlig outcome-linje uten `~` og uten total-linje.
+- Gear-priser: `Config.OUTCOME_PRICES` — under outcome-linjer (kun navn/antall, sjanssefarget): `AddDoubleLine` **Disenchant** (gul etikett, hvit myntverdi) med forventet AH-verdi for det **mest sannsynlige** utfallet via Auctionator (`OptionalDeps`). Formel: `(sjanse/100) × snittantall × enhetspris`. MoneyFrame-ikoner; null-denominationer skjules. Mangler pris på topp-utfallet → ingen Disenchant-linje.
 - Master-flag: `Config.ENABLED`
 - Shield / off-hand telles som **WEAPON** i DE-tabellene (essence-primær)
 - Tooltip-hook: `TooltipDataProcessor` når tilgjengelig; ellers `OnTooltipSetItem` på GameTooltip, ItemRefTooltip, ShoppingTooltip1/2, EmbeddedItemTooltip
