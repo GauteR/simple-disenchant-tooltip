@@ -13,10 +13,11 @@ L.CHAT_STATUS_OFF = "Addon is disabled in Config."
 
 L.OPTIONS_VERSION_FMT = "Version %s"
 L.OPTIONS_HELP =
-  "Hover reagents for the top two disenchant sources, or gear for all expected outcomes. Line color: green high chance, yellow medium, gray low."
+  "Hover reagents for the top two disenchant sources, or gear for all expected outcomes. Line color: green high chance, yellow medium, gray low. With Auctionator, gear lines show expected AH value."
 
 L.SOURCE_LINE_FMT = "%s %s, item level %d–%d"
 L.OUTCOME_LINE_FMT = "%s %s"
+L.OUTCOME_LINE_PRICE_FMT = "%s %s, ~%s"
 L.QUALITY_UNCOMMON = "Uncommon"
 L.QUALITY_RARE = "Rare"
 L.QUALITY_EPIC = "Epic"

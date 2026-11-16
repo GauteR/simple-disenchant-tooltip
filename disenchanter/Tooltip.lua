@@ -55,13 +55,29 @@ local function FormatSourceLine(source)
   )
 end
 
-local function FormatOutcomeLine(outcome)
-  local name = Disenchanter.Materials:GetMaterialName(outcome.id) or ("#" .. tostring(outcome.id))
-  return Disenchanter:T(
-    "OUTCOME_LINE_FMT",
-    name,
-    QtyText(outcome.min, outcome.max)
+-- Embed chance color as |cff so MoneyFrame |T icons are not vertex-tinted.
+local function ToHexColor(r, g, b)
+  return string.format(
+    "|cff%02x%02x%02x",
+    math.floor(r * 255 + 0.5),
+    math.floor(g * 255 + 0.5),
+    math.floor(b * 255 + 0.5)
   )
+end
+
+local function FormatOutcomeLine(outcome, r, g, b)
+  local name = Disenchanter.Materials:GetMaterialName(outcome.id) or ("#" .. tostring(outcome.id))
+  local qty = QtyText(outcome.min, outcome.max)
+  local hex = ToHexColor(r, g, b)
+  local Config = Disenchanter.Config
+  if Config and Config.OUTCOME_PRICES == true and Disenchanter.Pricing then
+    local money = Disenchanter.Pricing:FormatOutcomeExpected(outcome)
+    if money then
+      -- Color name/qty only; reset before coin textures.
+      return Disenchanter:T("OUTCOME_LINE_PRICE_FMT", hex .. name, qty .. "|r", money)
+    end
+  end
+  return hex .. Disenchanter:T("OUTCOME_LINE_FMT", name, qty) .. "|r"
 end
 
 -- Resolve item id from a tooltip frame (Retail-style data or classic GetItem).
@@ -127,7 +143,8 @@ function Tooltip:AppendOutcomes(tooltip, itemId)
   for i = 1, #outcomes do
     local outcome = outcomes[i]
     local r, g, b = Materials:ChanceColor(outcome.chance)
-    tooltip:AddLine(FormatOutcomeLine(outcome), r, g, b)
+    -- No AddLine RGB: chance color is embedded so coin icons stay untinted.
+    tooltip:AddLine(FormatOutcomeLine(outcome, r, g, b))
   end
   return true
 end
