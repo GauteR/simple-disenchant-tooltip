@@ -13,7 +13,8 @@ Pricing.GOLD_ICON = GOLD_ICON
 Pricing.SILVER_ICON = SILVER_ICON
 Pricing.COPPER_ICON = COPPER_ICON
 
--- Format copper as "Ng Ns Nc" with icons; omit denominations that are 0.
+-- Format copper as "Ng NNs NNc" with icons; omit denominations that are 0.
+-- Silver and copper always use a leading zero (two digits) when shown.
 function Pricing:FormatMoney(copper)
   if type(copper) ~= "number" or copper ~= copper then
     return nil
@@ -32,10 +33,10 @@ function Pricing:FormatMoney(copper)
     parts[#parts + 1] = tostring(gold) .. " " .. GOLD_ICON
   end
   if silver > 0 then
-    parts[#parts + 1] = tostring(silver) .. " " .. SILVER_ICON
+    parts[#parts + 1] = string.format("%02d", silver) .. " " .. SILVER_ICON
   end
   if copperPart > 0 then
-    parts[#parts + 1] = tostring(copperPart) .. " " .. COPPER_ICON
+    parts[#parts + 1] = string.format("%02d", copperPart) .. " " .. COPPER_ICON
   end
   if #parts == 0 then
     return nil
