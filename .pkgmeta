@@ -4,6 +4,8 @@ package-as: simple-disenchant-tooltip
 move-folders:
   simple-disenchant-tooltip/simple-disenchant-tooltip: simple-disenchant-tooltip
 
+manual-changelog: CHANGELOG.md
+
 ignore:
   - docs
   - tests

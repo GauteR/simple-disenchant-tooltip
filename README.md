@@ -61,6 +61,7 @@ After changing config or data files, reload with `/reload`.
 | --- | --- |
 | [`docs/DISENCHANT.md`](docs/DISENCHANT.md) | Data source, tooltip behaviour, Forever notes |
 | [`docs/RELEASE.md`](docs/RELEASE.md) | Local packager / GitHub Release (`gh`) / CurseForge–Wago |
+| [`CHANGELOG.md`](CHANGELOG.md) | Keep a Changelog (CurseForge webhook + release notes) |
 | [`docs/CURSEFORGE.md`](docs/CURSEFORGE.md) | User-facing CurseForge / Wago description |
 
 ## Local Forever install (dev)
