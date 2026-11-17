@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.4] - 2026-11-17
+
+### Changed
+
+- Bump Config.VERSION to 1.1.4. (#21)
+- Add Keep a Changelog and generate it from commits on release. (#20)
+- Create GitHub releases with gh changelog notes from release scripts. (#19)
+
 ## [1.1.3] - 2026-11-16
 
 ### Changed
