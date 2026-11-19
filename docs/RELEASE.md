@@ -9,8 +9,6 @@ Local packaging uses [BigWigsMods/packager](https://github.com/BigWigsMods/packa
 - `bash`
 - `lua` on PATH (for unit tests), or pass `-SkipTests` / `--skip-tests`
 - `gh` on PATH and authenticated (`gh auth login`) for real releases (GitHub Release)
-- `curl` (for CurseForge/Wago upload)
-- `jq` on PATH when uploading to CurseForge/Wago (not required for dry-run)
 - `zip` on PATH, or Python (`python`/`python3`) as fallback for a real ZIP (do not use Windows `tar.exe -a`)
 
 **Windows extras**
@@ -22,15 +20,12 @@ Local packaging uses [BigWigsMods/packager](https://github.com/BigWigsMods/packa
 ## One-time setup
 
 1. Ensure [`.release/release.sh`](../.release/release.sh) is present (tracked in git; pinned **BigWigsMods/packager v2.7.0**).
-2. Copy [`.release/.env.example`](../.release/.env.example) to `.release/.env` and add tokens when you are ready to upload to CurseForge/Wago:
-   - `CF_API_TOKEN` — CurseForge
-   - `WAGO_API_TOKEN` — Wago Addons  
-   Both `scripts/release.ps1` and `scripts/release.sh` load `.release/.env` (and optionally repo-root `.env`) into the process environment before calling the packager. Do not commit either env file. GitHub Releases use `gh` (not `GH_API_TOKEN`).
+2. The release scripts always run the packager with `-d` (build zip only) and **never upload to CurseForge/Wago**; no API tokens are needed. CurseForge is packaged by the GitHub tag webhook. GitHub Releases use `gh` (not `GH_API_TOKEN`).
 3. TOC project IDs in [`simple-disenchant-tooltip/simple-disenchant-tooltip.toc`](../simple-disenchant-tooltip/simple-disenchant-tooltip.toc):
    - `## X-Curse-Project-ID: 1809310` (set)
    - `## X-Wago-ID: <id>` when a Wago project exists
 
-Omit Wago until that project exists (dry-run packaging still works; upload needs tokens in `.release/.env`).
+Wago is not published from these scripts.
 
 ## Versioning
 
@@ -96,7 +91,7 @@ Skip tests:
 ./scripts/release.sh --dry-run --skip-tests
 ```
 
-Real release (tag push + GitHub Release via `gh`; CurseForge/Wago when tokens and project IDs exist):
+Real release (tag push + GitHub Release via `gh`; CurseForge is packaged by the GitHub tag webhook, the scripts never upload to CurseForge/Wago):
 
 ```powershell
 .\scripts\release.ps1

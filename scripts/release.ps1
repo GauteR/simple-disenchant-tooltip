@@ -1,10 +1,10 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Run unit tests, then package simple-disenchant-tooltip with BigWigs release.sh (optional upload).
+  Run unit tests, then package simple-disenchant-tooltip with BigWigs release.sh (no CurseForge/Wago upload).
 
 .PARAMETER DryRun
-  Skip CurseForge/Wago upload and GitHub release (passes -d to release.sh).
+  Skip tag, push and GitHub release (zip and CHANGELOG preview only). release.sh is always run with -d.
 
 .PARAMETER SkipTests
   Skip lua unit tests.
@@ -326,10 +326,10 @@ if (-not (Test-Path $releaseSh)) {
 
 $unixRoot = ConvertTo-GitBashPath $RepoRoot
 $useFallbackZip = -not (Test-GitBashHasZip $bash)
-$argList = @()
-if ($DryRun) {
-  $argList += "-d"
-} else {
+# Always -d: packager only builds the zip. CurseForge is fed by the GitHub tag webhook,
+# so never upload to CurseForge/Wago from this script.
+$argList = @("-d")
+if (-not $DryRun) {
   Ensure-VersionTag (Join-Path $RepoRoot $ConfigPathRel)
 }
 # Wrapper owns GitHub releases via gh; prevent packager duplicate upload_github.
