@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] - 2026-11-19
+
+### Changed
+
+- bump to 1.1.5
+- Show 'Cannot be disenchanted' for Enchanting wands instead of outcomes and value. (#23)
+
 ## [1.1.4] - 2026-11-17
 
 ### Changed
