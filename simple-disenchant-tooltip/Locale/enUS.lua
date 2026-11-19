@@ -18,6 +18,7 @@ L.OPTIONS_HELP =
 L.SOURCE_LINE_FMT = "%s %s, item level %d–%d"
 L.OUTCOME_LINE_FMT = "%s %s"
 L.DISENCHANT_TOTAL = "Disenchant"
+L.CANNOT_DISENCHANT = "Cannot be disenchanted"
 L.QUALITY_UNCOMMON = "Uncommon"
 L.QUALITY_RARE = "Rare"
 L.QUALITY_EPIC = "Epic"

@@ -96,6 +96,14 @@ assert_eq(#gear.lines, gearCount + 3, "after clear, gear lines append again")
 
 Materials.GetOutcomesForItem = realGetOutcomes
 
+-- Given an Enchanting wand, when tooltip is built, then only a grey notice is shown.
+local wand = NewMockTooltip()
+Tooltip:AppendForItem(wand, 11287)
+assert_eq(#wand.lines, 2, "non-DE wand adds blank + notice")
+assert_eq(wand.lines[2], "Cannot be disenchanted", "wand shows cannot-disenchant text")
+Tooltip:AppendForItem(wand, 11287)
+assert_eq(#wand.lines, 2, "non-DE notice dedupes")
+
 if failures > 0 then
   print(string.format("%d failure(s)", failures))
   os.exit(1)
