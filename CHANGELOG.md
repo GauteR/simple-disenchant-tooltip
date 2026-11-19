@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Never upload to CurseForge/Wago from release scripts; packager always runs with -d.
+- update CHANGELOG for v1.1.5
 - bump to 1.1.5
 - Show 'Cannot be disenchanted' for Enchanting wands instead of outcomes and value. (#23)
 
