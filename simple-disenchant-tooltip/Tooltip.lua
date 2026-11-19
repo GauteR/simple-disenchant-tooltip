@@ -168,6 +168,17 @@ function Tooltip:AppendForItem(tooltip, itemId)
   if HasAppended(tooltip, itemId) then
     return
   end
+  -- Known non-DE gear (e.g. Enchanting wands): grey notice instead of outcomes/value.
+  local Materials = SimpleDisenchantTooltip.Materials
+  if Materials and Materials:IsNotDisenchantable(itemId) then
+    local Config = SimpleDisenchantTooltip.Config
+    if Config and Config.ITEM_OUTCOMES == true and tooltip and tooltip.AddLine then
+      tooltip:AddLine(" ")
+      tooltip:AddLine(SimpleDisenchantTooltip:T("CANNOT_DISENCHANT"), 0.55, 0.55, 0.55)
+      MarkAppended(tooltip, itemId)
+    end
+    return
+  end
   -- Materials: top two sources; gear: all expected DE results.
   local appended = self:AppendSources(tooltip, itemId)
   if not appended then

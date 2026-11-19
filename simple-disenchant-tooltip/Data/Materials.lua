@@ -20,6 +20,18 @@ local WEAPON_EQUIP = {
   INVTYPE_HOLDABLE = true,
 }
 
+-- Gear that looks disenchantable by quality/type but is not (e.g. wands made by Enchanting).
+local NOT_DISENCHANTABLE = {
+  [11287] = true, -- Lesser Magic Wand
+  [11288] = true, -- Greater Magic Wand
+  [11289] = true, -- Lesser Mystic Wand
+  [11290] = true, -- Greater Mystic Wand
+}
+
+function Materials:IsNotDisenchantable(itemId)
+  return type(itemId) == "number" and NOT_DISENCHANTABLE[itemId] == true
+end
+
 function Materials:GetEntry(itemId)
   if type(itemId) ~= "number" then
     return nil
@@ -92,8 +104,8 @@ function Materials:GetOutcomesForItem(itemId)
   if type(itemId) ~= "number" then
     return nil
   end
-  -- Enchanting mats are not disenchanted; skip.
-  if self:IsTracked(itemId) then
+  -- Enchanting mats and known non-DE items are not disenchanted; skip.
+  if self:IsTracked(itemId) or self:IsNotDisenchantable(itemId) then
     return nil
   end
 
