@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run unit tests, then package Snippets with BigWigs .release/release.sh (optional upload).
+# Run unit tests, then package Snippets with BigWigs .release/release.sh (no CurseForge/Wago upload).
 #
 # Usage:
 #   ./scripts/release.sh --dry-run
@@ -238,10 +238,11 @@ if [[ ! -f "$RELEASE_SH" ]]; then
   exit 1
 fi
 
-PACKAGER_ARGS=()
+# Always -d: packager only builds the zip. CurseForge is fed by the GitHub tag webhook,
+# so never upload to CurseForge/Wago from this script.
+PACKAGER_ARGS=(-d)
 if [[ $DRY_RUN -eq 1 ]]; then
   update_changelog "$RELEASE_VERSION" 0
-  PACKAGER_ARGS+=(-d)
 else
   update_changelog "$RELEASE_VERSION" 1
   ensure_version_tag "$REPO_ROOT/$CONFIG_PATH_REL"
