@@ -165,6 +165,72 @@ function Tables:GetOutcomes(quality, itemType, itemLevel, clampToNearest)
   return row.outcomes
 end
 
+local function RowHasAll(row, materialIds)
+  for i = 1, #materialIds do
+    local found = false
+    for j = 1, #row.outcomes do
+      if row.outcomes[j].id == materialIds[i] then
+        found = true
+        break
+      end
+    end
+    if not found then
+      return false
+    end
+  end
+  return true
+end
+
+local function RowDistance(row, itemLevel)
+  if type(itemLevel) ~= "number" then
+    return 0
+  end
+  if itemLevel < row.minLevel then
+    return row.minLevel - itemLevel
+  end
+  if itemLevel > row.maxLevel then
+    return itemLevel - row.maxLevel
+  end
+  return 0
+end
+
+-- Outcomes for an item whose real disenchant results were observed in game.
+-- materialIds: materials the item was seen to disenchant into (Data/ObservedItems.lua).
+-- Picks the band that contains every observed material (closest to itemLevel when several
+-- do) and replaces its chances by rank: primary, secondary, shard (chances = {75, 35, 10}).
+-- Returns nil when no band matches so callers fall back to the item-level lookup.
+-- Uncommon gear only: Rare/Epic bands are fixed 100% drops.
+function Tables:GetObservedOutcomes(quality, itemType, materialIds, itemLevel, chances)
+  if quality ~= "UNCOMMON" or type(materialIds) ~= "table" or #materialIds == 0 then
+    return nil
+  end
+  local byQuality = self.FORWARD[quality]
+  local ranges = byQuality and byQuality[itemType]
+  if not ranges then
+    return nil
+  end
+  local best, bestDist
+  for i = 1, #ranges do
+    local row = ranges[i]
+    if RowHasAll(row, materialIds) then
+      local dist = RowDistance(row, itemLevel)
+      if not best or dist < bestDist then
+        best, bestDist = row, dist
+      end
+    end
+  end
+  if not best then
+    return nil
+  end
+  chances = chances or { 75, 35, 10 }
+  local outcomes = {}
+  for i = 1, #best.outcomes do
+    local o = best.outcomes[i]
+    outcomes[i] = { id = o.id, chance = chances[i] or o.chance, min = o.min, max = o.max }
+  end
+  return outcomes
+end
+
 function Tables:GetMaterialName(itemId)
   return self.MATERIAL_NAMES[itemId]
 end

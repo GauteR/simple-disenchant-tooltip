@@ -10,6 +10,10 @@ SimpleDisenchantTooltip.Config = {
   ITEM_OUTCOMES = true,
   -- When ilvl is outside Vanilla DE bands, use nearest band (Forever low/high gear).
   OUTCOME_LEVEL_FALLBACK = true,
+  -- Prefer in-game observations (Data/ObservedItems.lua) over item-level bands for known items.
+  OBSERVED_ITEMS = true,
+  -- Chances by rank (primary, secondary, shard) for observed items.
+  OBSERVED_CHANCES = { 75, 35, 10 },
   -- Append Disenchant line with most-likely outcome AH value (TSM then Auctionator).
   OUTCOME_PRICES = true,
   -- TSM custom price source for material unit prices (soft-dep).

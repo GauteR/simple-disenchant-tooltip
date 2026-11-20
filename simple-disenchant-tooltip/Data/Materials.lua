@@ -132,7 +132,32 @@ function Materials:GetOutcomesForItem(itemId)
   end
   local Config = SimpleDisenchantTooltip.Config
   local clamp = Config and Config.OUTCOME_LEVEL_FALLBACK == true
+  local observed = self:GetObservedOutcomes(name, qualityKey, typeKey, itemLevel)
+  if observed then
+    return observed, qualityKey, typeKey, itemLevel
+  end
   return Tables:GetOutcomes(qualityKey, typeKey, itemLevel, clamp), qualityKey, typeKey, itemLevel
+end
+
+-- Outcomes from in-game observations (Data/ObservedItems.lua), keyed by item name.
+-- nil when disabled, the item was never observed, or no band fits the observed materials.
+function Materials:GetObservedOutcomes(itemName, qualityKey, typeKey, itemLevel)
+  local Config = SimpleDisenchantTooltip.Config
+  local observedItems = SimpleDisenchantTooltip.ObservedItems
+  if not (Config and Config.OBSERVED_ITEMS == true) or not observedItems or type(itemName) ~= "string" then
+    return nil
+  end
+  local materialIds = observedItems[itemName]
+  if not materialIds then
+    return nil
+  end
+  return SimpleDisenchantTooltip.Tables:GetObservedOutcomes(
+    qualityKey,
+    typeKey,
+    materialIds,
+    itemLevel,
+    Config.OBSERVED_CHANCES
+  )
 end
 
 -- Pure-Lua outcome lookup (tests / callers with explicit stats).
