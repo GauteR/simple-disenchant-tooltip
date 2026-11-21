@@ -132,7 +132,32 @@ function Materials:GetOutcomesForItem(itemId)
   end
   local Config = SimpleDisenchantTooltip.Config
   local clamp = Config and Config.OUTCOME_LEVEL_FALLBACK == true
+  local observed = self:GetObservedOutcomes(name, qualityKey, typeKey, itemLevel)
+  if observed then
+    return observed, qualityKey, typeKey, itemLevel
+  end
   return Tables:GetOutcomes(qualityKey, typeKey, itemLevel, clamp), qualityKey, typeKey, itemLevel
+end
+
+-- Outcomes from in-game observations (Data/ObservedItems.lua), keyed by item name.
+-- nil when disabled, the item was never observed, or no band fits the observed materials.
+function Materials:GetObservedOutcomes(itemName, qualityKey, typeKey, itemLevel)
+  local Config = SimpleDisenchantTooltip.Config
+  local observedItems = SimpleDisenchantTooltip.ObservedItems
+  if not (Config and Config.OBSERVED_ITEMS == true) or not observedItems or type(itemName) ~= "string" then
+    return nil
+  end
+  local materialIds = observedItems[itemName]
+  if not materialIds then
+    return nil
+  end
+  return SimpleDisenchantTooltip.Tables:GetObservedOutcomes(
+    qualityKey,
+    typeKey,
+    materialIds,
+    itemLevel,
+    Config.OBSERVED_CHANCES
+  )
 end
 
 -- Pure-Lua outcome lookup (tests / callers with explicit stats).
@@ -163,6 +188,29 @@ function Materials:ChanceColor(chance)
   return 0.55, 0.55, 0.55
 end
 
+-- Replace a merged source group's Vanilla level range with the range this material was
+-- observed at (Data/ObservedLevels.lua), and uncommon chances with the rank chance.
+-- No-op when disabled or nothing was observed for this material/quality/type.
+function Materials:ApplyObservedLevels(materialId, group)
+  local Config = SimpleDisenchantTooltip.Config
+  local levels = SimpleDisenchantTooltip.ObservedLevels
+  if not (Config and Config.OBSERVED_LEVELS == true) or not levels then
+    return group
+  end
+  local byQuality = levels[materialId] and levels[materialId][group.quality]
+  local range = byQuality and byQuality[group.itemType]
+  if not range then
+    return group
+  end
+  group.minLevel = range[1]
+  group.maxLevel = range[2]
+  if group.quality == "UNCOMMON" and group.rank then
+    local chances = Config.OBSERVED_CHANCES or { 75, 35, 10 }
+    group.chance = chances[group.rank] or group.chance
+  end
+  return group
+end
+
 -- Merge source bands by quality+type, then return top N by chance (default 2).
 function Materials:GetTopSources(itemId, limit)
   limit = limit or 2
@@ -184,6 +232,7 @@ function Materials:GetTopSources(itemId, limit)
         minLevel = s.minLevel,
         maxLevel = s.maxLevel,
         chance = s.chance,
+        rank = s.rank,
       }
       groups[key] = g
       order[#order + 1] = key
@@ -202,7 +251,9 @@ function Materials:GetTopSources(itemId, limit)
 
   local list = {}
   for i = 1, #order do
-    list[#list + 1] = groups[order[i]]
+    local g = groups[order[i]]
+    self:ApplyObservedLevels(itemId, g)
+    list[#list + 1] = g
   end
   table.sort(list, function(a, b)
     if a.chance ~= b.chance then

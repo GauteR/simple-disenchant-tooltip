@@ -11,6 +11,8 @@
 Config.lua
 Locale/enUS.lua
 Data/Tables.lua
+Data/ObservedItems.lua
+Data/ObservedLevels.lua
 Data/Materials.lua
 Pricing.lua
 Core.lua

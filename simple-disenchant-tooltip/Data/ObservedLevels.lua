@@ -1,0 +1,88 @@
+-- Maintained by hand. Item-level ranges per material, with outliers removed.
+-- materialId -> quality -> type -> { minLevel, maxLevel } (item levels the material was observed at).
+SimpleDisenchantTooltip = SimpleDisenchantTooltip or {}
+SimpleDisenchantTooltip.ObservedLevels = {
+  [10938] = {
+    UNCOMMON = { ARMOR = { 5, 15 }, WEAPON = { 5, 15 } },
+  },
+  [10939] = {
+    UNCOMMON = { ARMOR = { 16, 20 }, WEAPON = { 16, 30 } },
+  },
+  [10940] = {
+    UNCOMMON = { ARMOR = { 5, 25 }, WEAPON = { 5, 25 } },
+  },
+  [10978] = {
+    UNCOMMON = { ARMOR = { 16, 25 }, WEAPON = { 16, 25 } },
+    RARE = { ANY = { 5, 25 } },
+  },
+  [10998] = {
+    UNCOMMON = { ARMOR = { 21, 25 } },
+  },
+  [11082] = {
+    UNCOMMON = { ARMOR = { 26, 30 } },
+  },
+  [11083] = {
+    UNCOMMON = { ARMOR = { 26, 35 }, WEAPON = { 26, 35 } },
+  },
+  [11084] = {
+    UNCOMMON = { ARMOR = { 26, 30 }, WEAPON = { 26, 30 } },
+    RARE = { ANY = { 26, 30 } },
+  },
+  [11134] = {
+    UNCOMMON = { ARMOR = { 31, 35 }, WEAPON = { 31, 35 } },
+  },
+  [11135] = {
+    UNCOMMON = { ARMOR = { 36, 40 }, WEAPON = { 36, 40 } },
+  },
+  [11137] = {
+    UNCOMMON = { ARMOR = { 36, 45 }, WEAPON = { 36, 45 } },
+  },
+  [11138] = {
+    UNCOMMON = { ARMOR = { 31, 35 }, WEAPON = { 31, 35 } },
+    RARE = { ANY = { 31, 35 } },
+  },
+  [11139] = {
+    UNCOMMON = { ARMOR = { 36, 40 }, WEAPON = { 36, 40 } },
+    RARE = { ANY = { 36, 40 } },
+  },
+  [11174] = {
+    UNCOMMON = { ARMOR = { 41, 45 }, WEAPON = { 41, 45 } },
+  },
+  [11175] = {
+    UNCOMMON = { ARMOR = { 46, 50 }, WEAPON = { 46, 50 } },
+  },
+  [11176] = {
+    UNCOMMON = { ARMOR = { 46, 55 }, WEAPON = { 46, 55 } },
+  },
+  [11177] = {
+    UNCOMMON = { ARMOR = { 41, 45 }, WEAPON = { 41, 45 } },
+    RARE = { ANY = { 41, 45 } },
+    EPIC = { ANY = { 40, 45 } },
+  },
+  [11178] = {
+    UNCOMMON = { ARMOR = { 46, 50 }, WEAPON = { 46, 50 } },
+    RARE = { ANY = { 46, 50 } },
+    EPIC = { ANY = { 46, 50 } },
+  },
+  [14343] = {
+    UNCOMMON = { ARMOR = { 51, 55 }, WEAPON = { 51, 55 } },
+    RARE = { ANY = { 51, 55 } },
+    EPIC = { ANY = { 51, 55 } },
+  },
+  [14344] = {
+    UNCOMMON = { ARMOR = { 56, 99 }, WEAPON = { 56, 99 } },
+    RARE = { ANY = { 56, 99 } },
+  },
+  [16202] = {
+    UNCOMMON = { ARMOR = { 51, 55 }, WEAPON = { 51, 55 } },
+  },
+  [16203] = {
+    UNCOMMON = { ARMOR = { 56, 99 }, WEAPON = { 56, 99 } },
+  },
+  [16204] = {
+    UNCOMMON = { ARMOR = { 56, 99 }, WEAPON = { 56, 99 } },
+  },
+  [20725] = {
+    EPIC = { ANY = { 56, 99 } },
+  },
+}
