@@ -12,6 +12,8 @@ SimpleDisenchantTooltip.Config = {
   OUTCOME_LEVEL_FALLBACK = true,
   -- Prefer in-game observations (Data/ObservedItems.lua) over item-level bands for known items.
   OBSERVED_ITEMS = true,
+  -- Material hover: use item-level ranges where each material was observed (Data/ObservedLevels.lua).
+  OBSERVED_LEVELS = true,
   -- Chances by rank (primary, secondary, shard) for observed items.
   OBSERVED_CHANCES = { 75, 35, 10 },
   -- Append Disenchant line with most-likely outcome AH value (TSM then Auctionator).

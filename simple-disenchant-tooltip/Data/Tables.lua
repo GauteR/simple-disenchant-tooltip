@@ -235,7 +235,8 @@ function Tables:GetMaterialName(itemId)
   return self.MATERIAL_NAMES[itemId]
 end
 
--- Build reverse index: materialId → { { quality, itemType, minLevel, maxLevel, chance, min, max }, ... }
+-- Build reverse index: materialId → { { quality, itemType, minLevel, maxLevel, chance, min, max, rank }, ... }
+-- rank = position in the band's outcomes (1 primary, 2 secondary, 3 shard).
 function Tables:BuildMaterialSources()
   local byId = {}
   local function add(quality, itemType, range)
@@ -254,6 +255,7 @@ function Tables:BuildMaterialSources()
         chance = o.chance,
         min = o.min,
         max = o.max,
+        rank = i,
       }
     end
   end
