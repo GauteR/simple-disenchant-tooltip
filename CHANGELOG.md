@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-21
+
+### Changed
+
+- Use observed disenchant results over item-level bands (#25)
+- Update CHANGELOG.md
+- Release scripts: never upload to CurseForge/Wago (#24)
+
 ## [1.1.5] - 2026-11-19
 
 ### Changed
