@@ -39,7 +39,7 @@ assert_eq(vanilla[1].minLevel, 5, "no observations: vanilla min level")
 assert_eq(vanilla[1].maxLevel, 25, "no observations: vanilla max level")
 assert_eq(vanilla[1].chance, 80, "no observations: vanilla chance")
 
--- Observed ranges (outliers already removed in data/level-ranges.csv).
+-- Observed ranges (outliers already removed).
 SimpleDisenchantTooltip.ObservedLevels = {
   [10940] = { UNCOMMON = { ARMOR = { 5, 26 }, WEAPON = { 10, 27 } } },
   [10939] = { UNCOMMON = { WEAPON = { 16, 24 } } },

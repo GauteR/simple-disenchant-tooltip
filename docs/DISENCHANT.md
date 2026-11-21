@@ -25,8 +25,15 @@ Linjefarge etter drop-sjanse: **grønn** ≥ `CHANCE_GREEN` (75), **gul** ≥ `C
 - Dedupe: `_SimpleDisenchantTooltipAppended` lagrer sist appendede `itemId` per tooltip-frame; `AppendForItem` hopper over re-entry for samme item (f.eks. Auctionator Vendor/Auction-refresh). Nullstilles på `OnTooltipCleared` / `OnHide` via `Tooltip:ClearAppendState`
 - `ENABLED = false`: chat-melding ved login; ingen slash/tooltip/Options
 
+## Observed level ranges
+
+`Data/ObservedLevels.lua` (edited by hand; no generator). Source: [BootyBayBroker Forever DE odds](https://bootybaybroker.com/forever/crafting/disenchant) (client build 1.60.1.70755 brackets + observed/inferred results). Rows are material → quality → type → min/max **item level** (union of BBB bands). Rare/Epic use `ANY` (matches `Tables:BuildMaterialSources`). Flag: `Config.OBSERVED_LEVELS`.
+
+Notable Forever vs Vanilla (from BBB): uncommon **weapons** ilvl 21–30 yield **Greater Magic Essence** (not Lesser/Greater Astral); top uncommon/rare bands extend to **ilvl 99**; Rare Small Glimmering starts at **ilvl 5**.
+
 ## Referanser
 
+- [BootyBayBroker — Forever disenchant odds](https://bootybaybroker.com/forever/crafting/disenchant)
 - [Warcraft Wiki — Disenchanting tables](https://warcraft.wiki.gg/wiki/Disenchanting_tables)
 - [Legacy of Warcraft — Classic disenchanting table](https://legacyofwarcraft.com/db/classic/professions/disenchanting.html)
 
