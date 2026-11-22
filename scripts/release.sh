@@ -227,6 +227,8 @@ if [[ $SKIP_TESTS -eq 0 ]]; then
   lua tests/test_tooltip.lua
   lua tests/test_release_meta.lua
   lua tests/test_changelog_meta.lua
+  lua tests/test_observed_levels.lua
+  lua tests/test_observed_levels_update.lua
 fi
 
 RELEASE_VERSION="$(resolve_config_version "$REPO_ROOT/$CONFIG_PATH_REL")"
